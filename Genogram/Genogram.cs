@@ -36,7 +36,7 @@ namespace Genogram
         public Genogram()
         {
             InitializeComponent();
-
+            iniControlInfo();
             DrawShapeComponent();
 
             iniInfo();
@@ -49,9 +49,13 @@ namespace Genogram
             parentInfo = new ParentInfo();
             slashLine = new SlashLine();
 
-            // 測試用
-            child_textBox.Text = "男 男";
-
+        }
+        public void iniControlInfo()
+        {
+            ShapeSize_textBox.Text = "50";
+            man_radioButton.Checked = true;
+            self_relation_parent_radioButton.Checked = true;
+            self_married_radioButton.Checked = true;
         }
 
         public void DrawShapeComponent()
@@ -73,7 +77,7 @@ namespace Genogram
             DrawPanelWidth = DrawPanel.Width;
             DrawPanelHeight = DrawPanel.Height;
             // 所建圖形大小
-            ShapeWidth = ShapeHeight = 50;
+            ShapeWidth = ShapeHeight = Convert.ToSingle(ShapeSize_textBox.Text);
             // 男女連線下降高度
             lineDropY = ShapeWidth/2;
             // 離婚等斜線寬高度 (與中心點相距)
@@ -179,6 +183,29 @@ namespace Genogram
             if (Drag_radioButton.Checked) DrawType = "Drag";
         }
 
+        private void ShapeSize_textBox_TextChanged(object sender, EventArgs e)
+        {
+            ShapeWidth = ShapeHeight = Convert.ToSingle(ShapeSize_textBox.Text);
+        }
+
+        private void self_relation_parent_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (self_relation_parent_radioButton.Checked)
+            {
+                self_unmarried_radioButton.Checked = false;
+                self_unmarried_radioButton.Enabled = false;
+                // 測試用
+                if (child_textBox.Text == "") child_textBox.Text = "男 女";
+                
+            }
+            else
+            {
+                self_unmarried_radioButton.Enabled = true;
+                // 測試用
+                child_textBox.Text = "";
+            }
+        }
+
         private void Draw_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (Draw_radioButton.Checked) DrawType = "Draw";
@@ -233,7 +260,11 @@ namespace Genogram
                 selfInfo.member += 1;
                 g.FillRectangle(KeyPersonBush, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
                 g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
-                g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
+                if (!self_unmarried_radioButton.Checked)
+                {
+                    g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
+                }
+                
             }
 
             if (woman_radioButton.Checked)
@@ -241,7 +272,10 @@ namespace Genogram
                 selfInfo.member += 1;
                 g.FillEllipse(KeyPersonBush, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
                 g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
-                g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
+                if (!self_unmarried_radioButton.Checked)
+                {
+                    g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
+                }
             }
 
             // [個案婚姻連線]
@@ -249,11 +283,6 @@ namespace Genogram
             if (self_married_radioButton.Checked)
             {
                 ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-                
-                //測試子女
-                
-                //ConnectShape(pen, "top", childLineX1, childLineY1, childLineX2, childLineY2);
-
             }
             // 同居
             else if (self_cohabit_radioButton.Checked)
@@ -273,6 +302,9 @@ namespace Genogram
                 slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
                 slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
             }
+
+            // [個案爸媽圖形]
+
 
             // [子女圖形]
             // 從TextBox獲取數量
@@ -305,7 +337,15 @@ namespace Genogram
                     }
                     else
                     {
-                        childInitialRatio_x = selfShapeRatio_M_x - selfShapeDistanceRatio / 2 - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                        if (childInfo.marriage.Count()==2 && childInfo.marriage[0] == "未")
+                        {
+                            childInitialRatio_x = selfShapeRatio_M_x - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                        }
+                        else
+                        {
+                            childInitialRatio_x = selfShapeRatio_M_x - selfShapeDistanceRatio / 2 - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                        }
+                        
                     }
                 }
                 // 偶數子女數量
