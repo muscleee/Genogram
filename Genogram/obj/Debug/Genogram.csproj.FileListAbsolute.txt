@@ -28,3 +28,13 @@ D:\Joe\code\C#\Genogram-main\Genogram\obj\Debug\Genogram.csproj.CoreCompileInput
 D:\Joe\code\C#\Genogram-main\Genogram\obj\Debug\Genogram.exe
 D:\Joe\code\C#\Genogram-main\Genogram\obj\Debug\Genogram.pdb
 D:\Joe\code\C#\Genogram-main\Genogram\obj\Debug\Genogram.csprojAssemblyReference.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Debug\Genogram.exe.config
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Debug\Genogram.exe
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Debug\Genogram.pdb
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.csprojAssemblyReference.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.Genogram.resources
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.Properties.Resources.resources
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.csproj.GenerateResource.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.csproj.CoreCompileInputs.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.exe
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Debug\Genogram.pdb

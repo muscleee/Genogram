@@ -36,7 +36,12 @@
             this.execute_button = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel12 = new System.Windows.Forms.Panel();
+            this.self_relation_childern_radioButton = new System.Windows.Forms.RadioButton();
+            this.self_relation_parent_radioButton = new System.Windows.Forms.RadioButton();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.self_unmarried_radioButton = new System.Windows.Forms.RadioButton();
             this.self_separate_radioButton = new System.Windows.Forms.RadioButton();
             this.self_married_radioButton = new System.Windows.Forms.RadioButton();
             this.self_cohabit_radioButton = new System.Windows.Forms.RadioButton();
@@ -46,14 +51,13 @@
             this.man_radioButton = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.panel9 = new System.Windows.Forms.Panel();
-            this.maternal_divorce_radioButton = new System.Windows.Forms.RadioButton();
-            this.maternal_married_radioButton = new System.Windows.Forms.RadioButton();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.paternal_divorce_radioButton = new System.Windows.Forms.RadioButton();
+            this.maternal_marriage_label = new System.Windows.Forms.Label();
+            this.paternal_marriage_label = new System.Windows.Forms.Label();
+            this.paternal_marriage_panel = new System.Windows.Forms.Panel();
+            this.paternal_separate_radioButton = new System.Windows.Forms.RadioButton();
             this.paternal_married_radioButton = new System.Windows.Forms.RadioButton();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.paternal_cohabit_radioButton = new System.Windows.Forms.RadioButton();
+            this.paternal_divorce_radioButton = new System.Windows.Forms.RadioButton();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -86,31 +90,31 @@
             this.label11 = new System.Windows.Forms.Label();
             this.ShapeSize_textBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.self_relation_childern_radioButton = new System.Windows.Forms.RadioButton();
-            this.self_relation_parent_radioButton = new System.Windows.Forms.RadioButton();
-            this.label13 = new System.Windows.Forms.Label();
-            this.self_unmarried_radioButton = new System.Windows.Forms.RadioButton();
+            this.maternal_marriage_panel = new System.Windows.Forms.Panel();
+            this.maternal_separate_radioButton = new System.Windows.Forms.RadioButton();
+            this.maternal_married_radioButton = new System.Windows.Forms.RadioButton();
+            this.maternal_cohabit_radioButton = new System.Windows.Forms.RadioButton();
+            this.maternal_divorce_radioButton = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel9.SuspendLayout();
-            this.panel8.SuspendLayout();
+            this.paternal_marriage_panel.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel10.SuspendLayout();
             this.panel11.SuspendLayout();
-            this.panel12.SuspendLayout();
+            this.maternal_marriage_panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // DrawPanel
             // 
             this.DrawPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.DrawPanel.Location = new System.Drawing.Point(29, 207);
+            this.DrawPanel.Location = new System.Drawing.Point(29, 222);
             this.DrawPanel.Name = "DrawPanel";
-            this.DrawPanel.Size = new System.Drawing.Size(952, 492);
+            this.DrawPanel.Size = new System.Drawing.Size(952, 551);
             this.DrawPanel.TabIndex = 0;
             this.DrawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.DrawPanel_Paint);
             this.DrawPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawPanel_MouseDown);
@@ -166,7 +170,7 @@
             // 
             // execute_button
             // 
-            this.execute_button.Location = new System.Drawing.Point(906, 152);
+            this.execute_button.Location = new System.Drawing.Point(889, 179);
             this.execute_button.Name = "execute_button";
             this.execute_button.Size = new System.Drawing.Size(75, 23);
             this.execute_button.TabIndex = 4;
@@ -196,6 +200,48 @@
             this.panel2.Size = new System.Drawing.Size(330, 90);
             this.panel2.TabIndex = 6;
             // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.self_relation_childern_radioButton);
+            this.panel12.Controls.Add(this.self_relation_parent_radioButton);
+            this.panel12.Location = new System.Drawing.Point(49, 35);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(118, 22);
+            this.panel12.TabIndex = 20;
+            // 
+            // self_relation_childern_radioButton
+            // 
+            this.self_relation_childern_radioButton.AutoSize = true;
+            this.self_relation_childern_radioButton.Location = new System.Drawing.Point(61, 3);
+            this.self_relation_childern_radioButton.Name = "self_relation_childern_radioButton";
+            this.self_relation_childern_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.self_relation_childern_radioButton.TabIndex = 16;
+            this.self_relation_childern_radioButton.TabStop = true;
+            this.self_relation_childern_radioButton.Text = "子女";
+            this.self_relation_childern_radioButton.UseVisualStyleBackColor = true;
+            this.self_relation_childern_radioButton.CheckedChanged += new System.EventHandler(this.self_relation_childern_radioButton_CheckedChanged);
+            // 
+            // self_relation_parent_radioButton
+            // 
+            this.self_relation_parent_radioButton.AutoSize = true;
+            this.self_relation_parent_radioButton.Location = new System.Drawing.Point(6, 3);
+            this.self_relation_parent_radioButton.Name = "self_relation_parent_radioButton";
+            this.self_relation_parent_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.self_relation_parent_radioButton.TabIndex = 2;
+            this.self_relation_parent_radioButton.TabStop = true;
+            this.self_relation_parent_radioButton.Text = "父母";
+            this.self_relation_parent_radioButton.UseVisualStyleBackColor = true;
+            this.self_relation_parent_radioButton.CheckedChanged += new System.EventHandler(this.self_relation_parent_radioButton_CheckedChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 39);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(35, 12);
+            this.label13.TabIndex = 19;
+            this.label13.Text = "地位 :";
+            // 
             // panel7
             // 
             this.panel7.Controls.Add(this.self_unmarried_radioButton);
@@ -207,6 +253,17 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(278, 22);
             this.panel7.TabIndex = 17;
+            // 
+            // self_unmarried_radioButton
+            // 
+            this.self_unmarried_radioButton.AutoSize = true;
+            this.self_unmarried_radioButton.Location = new System.Drawing.Point(6, 3);
+            this.self_unmarried_radioButton.Name = "self_unmarried_radioButton";
+            this.self_unmarried_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.self_unmarried_radioButton.TabIndex = 19;
+            this.self_unmarried_radioButton.TabStop = true;
+            this.self_unmarried_radioButton.Text = "未婚";
+            this.self_unmarried_radioButton.UseVisualStyleBackColor = true;
             // 
             // self_separate_radioButton
             // 
@@ -294,94 +351,87 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.panel9);
-            this.panel3.Controls.Add(this.panel8);
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.label4);
-            this.panel3.Location = new System.Drawing.Point(687, 19);
+            this.panel3.Controls.Add(this.maternal_marriage_label);
+            this.panel3.Controls.Add(this.paternal_marriage_label);
+            this.panel3.Controls.Add(this.paternal_marriage_panel);
+            this.panel3.Controls.Add(this.maternal_marriage_panel);
+            this.panel3.Location = new System.Drawing.Point(614, 32);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(224, 68);
+            this.panel3.Size = new System.Drawing.Size(338, 68);
             this.panel3.TabIndex = 9;
             // 
-            // panel9
+            // maternal_marriage_label
             // 
-            this.panel9.Controls.Add(this.maternal_divorce_radioButton);
-            this.panel9.Controls.Add(this.maternal_married_radioButton);
-            this.panel9.Location = new System.Drawing.Point(96, 38);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(118, 22);
-            this.panel9.TabIndex = 18;
+            this.maternal_marriage_label.AutoSize = true;
+            this.maternal_marriage_label.Location = new System.Drawing.Point(7, 41);
+            this.maternal_marriage_label.Name = "maternal_marriage_label";
+            this.maternal_marriage_label.Size = new System.Drawing.Size(83, 12);
+            this.maternal_marriage_label.TabIndex = 8;
+            this.maternal_marriage_label.Text = "女方長輩婚姻 :";
             // 
-            // maternal_divorce_radioButton
+            // paternal_marriage_label
             // 
-            this.maternal_divorce_radioButton.AutoSize = true;
-            this.maternal_divorce_radioButton.Location = new System.Drawing.Point(61, 3);
-            this.maternal_divorce_radioButton.Name = "maternal_divorce_radioButton";
-            this.maternal_divorce_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.maternal_divorce_radioButton.TabIndex = 16;
-            this.maternal_divorce_radioButton.TabStop = true;
-            this.maternal_divorce_radioButton.Text = "離異";
-            this.maternal_divorce_radioButton.UseVisualStyleBackColor = true;
+            this.paternal_marriage_label.AutoSize = true;
+            this.paternal_marriage_label.Location = new System.Drawing.Point(7, 14);
+            this.paternal_marriage_label.Name = "paternal_marriage_label";
+            this.paternal_marriage_label.Size = new System.Drawing.Size(83, 12);
+            this.paternal_marriage_label.TabIndex = 5;
+            this.paternal_marriage_label.Text = "男方長輩婚姻 :";
             // 
-            // maternal_married_radioButton
+            // paternal_marriage_panel
             // 
-            this.maternal_married_radioButton.AutoSize = true;
-            this.maternal_married_radioButton.Location = new System.Drawing.Point(6, 3);
-            this.maternal_married_radioButton.Name = "maternal_married_radioButton";
-            this.maternal_married_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.maternal_married_radioButton.TabIndex = 2;
-            this.maternal_married_radioButton.TabStop = true;
-            this.maternal_married_radioButton.Text = "已婚";
-            this.maternal_married_radioButton.UseVisualStyleBackColor = true;
+            this.paternal_marriage_panel.Controls.Add(this.paternal_separate_radioButton);
+            this.paternal_marriage_panel.Controls.Add(this.paternal_married_radioButton);
+            this.paternal_marriage_panel.Controls.Add(this.paternal_cohabit_radioButton);
+            this.paternal_marriage_panel.Controls.Add(this.paternal_divorce_radioButton);
+            this.paternal_marriage_panel.Location = new System.Drawing.Point(96, 9);
+            this.paternal_marriage_panel.Name = "paternal_marriage_panel";
+            this.paternal_marriage_panel.Size = new System.Drawing.Size(226, 22);
+            this.paternal_marriage_panel.TabIndex = 23;
             // 
-            // panel8
+            // paternal_separate_radioButton
             // 
-            this.panel8.Controls.Add(this.paternal_divorce_radioButton);
-            this.panel8.Controls.Add(this.paternal_married_radioButton);
-            this.panel8.Location = new System.Drawing.Point(96, 9);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(118, 22);
-            this.panel8.TabIndex = 18;
+            this.paternal_separate_radioButton.AutoSize = true;
+            this.paternal_separate_radioButton.Location = new System.Drawing.Point(115, 3);
+            this.paternal_separate_radioButton.Name = "paternal_separate_radioButton";
+            this.paternal_separate_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.paternal_separate_radioButton.TabIndex = 17;
+            this.paternal_separate_radioButton.TabStop = true;
+            this.paternal_separate_radioButton.Text = "分居";
+            this.paternal_separate_radioButton.UseVisualStyleBackColor = true;
+            // 
+            // paternal_married_radioButton
+            // 
+            this.paternal_married_radioButton.AutoSize = true;
+            this.paternal_married_radioButton.Location = new System.Drawing.Point(7, 3);
+            this.paternal_married_radioButton.Name = "paternal_married_radioButton";
+            this.paternal_married_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.paternal_married_radioButton.TabIndex = 2;
+            this.paternal_married_radioButton.TabStop = true;
+            this.paternal_married_radioButton.Text = "結婚";
+            this.paternal_married_radioButton.UseVisualStyleBackColor = true;
+            // 
+            // paternal_cohabit_radioButton
+            // 
+            this.paternal_cohabit_radioButton.AutoSize = true;
+            this.paternal_cohabit_radioButton.Location = new System.Drawing.Point(62, 3);
+            this.paternal_cohabit_radioButton.Name = "paternal_cohabit_radioButton";
+            this.paternal_cohabit_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.paternal_cohabit_radioButton.TabIndex = 18;
+            this.paternal_cohabit_radioButton.TabStop = true;
+            this.paternal_cohabit_radioButton.Text = "同居";
+            this.paternal_cohabit_radioButton.UseVisualStyleBackColor = true;
             // 
             // paternal_divorce_radioButton
             // 
             this.paternal_divorce_radioButton.AutoSize = true;
-            this.paternal_divorce_radioButton.Location = new System.Drawing.Point(61, 3);
+            this.paternal_divorce_radioButton.Location = new System.Drawing.Point(170, 3);
             this.paternal_divorce_radioButton.Name = "paternal_divorce_radioButton";
             this.paternal_divorce_radioButton.Size = new System.Drawing.Size(47, 16);
             this.paternal_divorce_radioButton.TabIndex = 16;
             this.paternal_divorce_radioButton.TabStop = true;
             this.paternal_divorce_radioButton.Text = "離異";
             this.paternal_divorce_radioButton.UseVisualStyleBackColor = true;
-            // 
-            // paternal_married_radioButton
-            // 
-            this.paternal_married_radioButton.AutoSize = true;
-            this.paternal_married_radioButton.Location = new System.Drawing.Point(6, 3);
-            this.paternal_married_radioButton.Name = "paternal_married_radioButton";
-            this.paternal_married_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.paternal_married_radioButton.TabIndex = 2;
-            this.paternal_married_radioButton.TabStop = true;
-            this.paternal_married_radioButton.Text = "已婚";
-            this.paternal_married_radioButton.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 41);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 12);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "女方長輩婚姻 :";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 14);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 12);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "男方長輩婚姻 :";
             // 
             // comboBox4
             // 
@@ -705,64 +755,67 @@
             this.label12.TabIndex = 21;
             this.label12.Text = "大小 :";
             // 
-            // panel12
+            // maternal_marriage_panel
             // 
-            this.panel12.Controls.Add(this.self_relation_childern_radioButton);
-            this.panel12.Controls.Add(this.self_relation_parent_radioButton);
-            this.panel12.Location = new System.Drawing.Point(49, 35);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(118, 22);
-            this.panel12.TabIndex = 20;
+            this.maternal_marriage_panel.Controls.Add(this.maternal_married_radioButton);
+            this.maternal_marriage_panel.Controls.Add(this.maternal_separate_radioButton);
+            this.maternal_marriage_panel.Controls.Add(this.maternal_cohabit_radioButton);
+            this.maternal_marriage_panel.Controls.Add(this.maternal_divorce_radioButton);
+            this.maternal_marriage_panel.Location = new System.Drawing.Point(96, 38);
+            this.maternal_marriage_panel.Name = "maternal_marriage_panel";
+            this.maternal_marriage_panel.Size = new System.Drawing.Size(226, 22);
+            this.maternal_marriage_panel.TabIndex = 24;
             // 
-            // self_relation_childern_radioButton
+            // maternal_separate_radioButton
             // 
-            this.self_relation_childern_radioButton.AutoSize = true;
-            this.self_relation_childern_radioButton.Location = new System.Drawing.Point(61, 3);
-            this.self_relation_childern_radioButton.Name = "self_relation_childern_radioButton";
-            this.self_relation_childern_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.self_relation_childern_radioButton.TabIndex = 16;
-            this.self_relation_childern_radioButton.TabStop = true;
-            this.self_relation_childern_radioButton.Text = "子女";
-            this.self_relation_childern_radioButton.UseVisualStyleBackColor = true;
+            this.maternal_separate_radioButton.AutoSize = true;
+            this.maternal_separate_radioButton.Location = new System.Drawing.Point(115, 3);
+            this.maternal_separate_radioButton.Name = "maternal_separate_radioButton";
+            this.maternal_separate_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.maternal_separate_radioButton.TabIndex = 17;
+            this.maternal_separate_radioButton.TabStop = true;
+            this.maternal_separate_radioButton.Text = "分居";
+            this.maternal_separate_radioButton.UseVisualStyleBackColor = true;
             // 
-            // self_relation_parent_radioButton
+            // maternal_married_radioButton
             // 
-            this.self_relation_parent_radioButton.AutoSize = true;
-            this.self_relation_parent_radioButton.Location = new System.Drawing.Point(6, 3);
-            this.self_relation_parent_radioButton.Name = "self_relation_parent_radioButton";
-            this.self_relation_parent_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.self_relation_parent_radioButton.TabIndex = 2;
-            this.self_relation_parent_radioButton.TabStop = true;
-            this.self_relation_parent_radioButton.Text = "父母";
-            this.self_relation_parent_radioButton.UseVisualStyleBackColor = true;
-            this.self_relation_parent_radioButton.CheckedChanged += new System.EventHandler(this.self_relation_parent_radioButton_CheckedChanged);
+            this.maternal_married_radioButton.AutoSize = true;
+            this.maternal_married_radioButton.Location = new System.Drawing.Point(7, 3);
+            this.maternal_married_radioButton.Name = "maternal_married_radioButton";
+            this.maternal_married_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.maternal_married_radioButton.TabIndex = 2;
+            this.maternal_married_radioButton.TabStop = true;
+            this.maternal_married_radioButton.Text = "結婚";
+            this.maternal_married_radioButton.UseVisualStyleBackColor = true;
             // 
-            // label13
+            // maternal_cohabit_radioButton
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(7, 39);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(35, 12);
-            this.label13.TabIndex = 19;
-            this.label13.Text = "地位 :";
+            this.maternal_cohabit_radioButton.AutoSize = true;
+            this.maternal_cohabit_radioButton.Location = new System.Drawing.Point(62, 3);
+            this.maternal_cohabit_radioButton.Name = "maternal_cohabit_radioButton";
+            this.maternal_cohabit_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.maternal_cohabit_radioButton.TabIndex = 18;
+            this.maternal_cohabit_radioButton.TabStop = true;
+            this.maternal_cohabit_radioButton.Text = "同居";
+            this.maternal_cohabit_radioButton.UseVisualStyleBackColor = true;
             // 
-            // self_unmarried_radioButton
+            // maternal_divorce_radioButton
             // 
-            this.self_unmarried_radioButton.AutoSize = true;
-            this.self_unmarried_radioButton.Location = new System.Drawing.Point(6, 3);
-            this.self_unmarried_radioButton.Name = "self_unmarried_radioButton";
-            this.self_unmarried_radioButton.Size = new System.Drawing.Size(47, 16);
-            this.self_unmarried_radioButton.TabIndex = 19;
-            this.self_unmarried_radioButton.TabStop = true;
-            this.self_unmarried_radioButton.Text = "未婚";
-            this.self_unmarried_radioButton.UseVisualStyleBackColor = true;
+            this.maternal_divorce_radioButton.AutoSize = true;
+            this.maternal_divorce_radioButton.Location = new System.Drawing.Point(170, 3);
+            this.maternal_divorce_radioButton.Name = "maternal_divorce_radioButton";
+            this.maternal_divorce_radioButton.Size = new System.Drawing.Size(47, 16);
+            this.maternal_divorce_radioButton.TabIndex = 16;
+            this.maternal_divorce_radioButton.TabStop = true;
+            this.maternal_divorce_radioButton.Text = "離異";
+            this.maternal_divorce_radioButton.UseVisualStyleBackColor = true;
             // 
             // Genogram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1014, 722);
+            this.ClientSize = new System.Drawing.Size(1014, 822);
             this.Controls.Add(this.ShapeSize_textBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.panel11);
@@ -778,16 +831,16 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel12.ResumeLayout(false);
+            this.panel12.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel9.ResumeLayout(false);
-            this.panel9.PerformLayout();
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
+            this.paternal_marriage_panel.ResumeLayout(false);
+            this.paternal_marriage_panel.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
@@ -796,8 +849,8 @@
             this.panel10.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
-            this.panel12.ResumeLayout(false);
-            this.panel12.PerformLayout();
+            this.maternal_marriage_panel.ResumeLayout(false);
+            this.maternal_marriage_panel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -816,8 +869,8 @@
         private System.Windows.Forms.RadioButton woman_radioButton;
         private System.Windows.Forms.RadioButton man_radioButton;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label maternal_marriage_label;
+        private System.Windows.Forms.Label paternal_marriage_label;
         private System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.Label label5;
@@ -839,12 +892,6 @@
         private System.Windows.Forms.RadioButton self_divorce_radioButton;
         private System.Windows.Forms.RadioButton self_married_radioButton;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Panel panel9;
-        private System.Windows.Forms.RadioButton maternal_divorce_radioButton;
-        private System.Windows.Forms.RadioButton maternal_married_radioButton;
-        private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.RadioButton paternal_divorce_radioButton;
-        private System.Windows.Forms.RadioButton paternal_married_radioButton;
         private System.Windows.Forms.RadioButton Drag_radioButton;
         private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.RadioButton self_separate_radioButton;
@@ -868,6 +915,16 @@
         private System.Windows.Forms.RadioButton self_relation_parent_radioButton;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.RadioButton self_unmarried_radioButton;
+        private System.Windows.Forms.Panel paternal_marriage_panel;
+        private System.Windows.Forms.RadioButton paternal_separate_radioButton;
+        private System.Windows.Forms.RadioButton paternal_married_radioButton;
+        private System.Windows.Forms.RadioButton paternal_cohabit_radioButton;
+        private System.Windows.Forms.RadioButton paternal_divorce_radioButton;
+        private System.Windows.Forms.Panel maternal_marriage_panel;
+        private System.Windows.Forms.RadioButton maternal_married_radioButton;
+        private System.Windows.Forms.RadioButton maternal_separate_radioButton;
+        private System.Windows.Forms.RadioButton maternal_cohabit_radioButton;
+        private System.Windows.Forms.RadioButton maternal_divorce_radioButton;
     }
 }
 

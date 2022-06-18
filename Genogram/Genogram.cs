@@ -29,6 +29,7 @@ namespace Genogram
         float DrawPanelWidth, DrawPanelHeight, ShapeWidth, ShapeHeight;
         float lineDropY, lineWidth;
         float selfShapeRatio_y, childShapeRatio_y, parentShapeRatio_y, selfShapeRatio_M_x, selfShapeRatio_W_x;
+        float otherShapeRatio_W_x, otherShapeRatio_M_x, otherShapeDistanceRatio, twoShapeDistanceRatio;
         float selfShapeDistanceRatio;
         float childInitialRatio_x;
         float slashWidth, slashHeight;
@@ -56,6 +57,8 @@ namespace Genogram
             man_radioButton.Checked = true;
             self_relation_parent_radioButton.Checked = true;
             self_married_radioButton.Checked = true;
+            paternal_married_radioButton.Checked = true;
+            maternal_married_radioButton.Checked = true;
         }
 
         public void DrawShapeComponent()
@@ -79,7 +82,7 @@ namespace Genogram
             // 所建圖形大小
             ShapeWidth = ShapeHeight = Convert.ToSingle(ShapeSize_textBox.Text);
             // 男女連線下降高度
-            lineDropY = ShapeWidth/2;
+            lineDropY = ShapeWidth / 2;
             // 離婚等斜線寬高度 (與中心點相距)
             slashWidth = slashHeight = 10;
             // 不同類別的高度
@@ -87,9 +90,13 @@ namespace Genogram
             selfShapeRatio_y = 0.4f;
             childShapeRatio_y = 0.7f;
             // 個案男女位置初始(畫布比例，形狀左上角起點)
-            selfShapeRatio_M_x = 0.45f;
-            selfShapeRatio_W_x = 0.55f;
+            selfShapeRatio_M_x = 0.4f;
+            selfShapeRatio_W_x = 0.6f;
+            otherShapeRatio_M_x = 0.45f;
+            otherShapeRatio_W_x = 0.55f;
             selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
+            otherShapeDistanceRatio = otherShapeRatio_W_x - otherShapeRatio_M_x;
+            twoShapeDistanceRatio = selfShapeDistanceRatio / otherShapeDistanceRatio;
 
         }
 
@@ -102,26 +109,26 @@ namespace Genogram
                 for (int idx = 0; idx < points.Count - 1; idx++)
                 {
                     lastPoint = points[idx];
-                    currentPoint = points[idx+1];
+                    currentPoint = points[idx + 1];
                     if (DrawType == "Draw" && lastPoint != breakpoint && currentPoint != breakpoint)
                     {
                         g.DrawLine(pen, lastPoint, currentPoint);
-                    }                    
+                    }
                 }
             }
-            
+
         }
 
         private void DrawPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            isMouseDown = true;            
+            isMouseDown = true;
             points.Add(e.Location);
 
             if (DrawType == "Clear")
             {
                 points = new List<Point>();
                 g.Clear(Color.White);
-                
+
             }
         }
 
@@ -136,8 +143,8 @@ namespace Genogram
             if (DrawType == "Draw" && isMouseDown)
             {
                 points.Add(e.Location);
-                g.DrawLine(pen, points[points.Count-2], points[points.Count-1]);
-            } 
+                g.DrawLine(pen, points[points.Count - 2], points[points.Count - 1]);
+            }
         }
 
         // ===== 子女狀況
@@ -175,6 +182,9 @@ namespace Genogram
         {
             child_marriage_textBox.Text = child_marriage_textBox.Text + " 離";
         }
+
+
+
         // 子女狀況 [End]
 
         // ===== 畫布功能
@@ -188,21 +198,49 @@ namespace Genogram
             ShapeWidth = ShapeHeight = Convert.ToSingle(ShapeSize_textBox.Text);
         }
 
+
         private void self_relation_parent_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (self_relation_parent_radioButton.Checked)
             {
                 self_unmarried_radioButton.Checked = false;
                 self_unmarried_radioButton.Enabled = false;
+                selfShapeRatio_y = 0.4f;
+                selfShapeRatio_M_x = 0.4f;
+                selfShapeRatio_W_x = 0.6f;
+                selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
+
+                paternal_marriage_label.Text = "男方長輩婚姻 : ";
+                maternal_marriage_label.Visible = true;
+                maternal_marriage_panel.Visible = true;
+
+                if (!(self_married_radioButton.Checked || self_cohabit_radioButton.Checked ||
+                      self_separate_radioButton.Checked || self_divorce_radioButton.Checked)) self_married_radioButton.Checked = true;
+
                 // 測試用
                 if (child_textBox.Text == "") child_textBox.Text = "男 女";
-                
+
             }
             else
             {
                 self_unmarried_radioButton.Enabled = true;
                 // 測試用
                 child_textBox.Text = "";
+            }
+        }
+
+        private void self_relation_childern_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (self_relation_childern_radioButton.Checked)
+            {
+                selfShapeRatio_y = 0.6f;
+                selfShapeRatio_M_x = 0.45f;
+                selfShapeRatio_W_x = 0.55f;
+                selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
+
+                paternal_marriage_label.Text = "　　爸媽婚姻 : ";
+                maternal_marriage_label.Visible = false;
+                maternal_marriage_panel.Visible = false;
             }
         }
 
@@ -225,12 +263,41 @@ namespace Genogram
             //g.DrawEllipse(pen, 3000, 500, 100, 100);
         }
 
+        private List<float> DrawParent(float x1, float y, float ShapeDistanceRatio)
+        {
+            // x : 孩子圖形中心點x座標, y : 孩子圖形左上y座標, ShapeDistanceRatio : 男女距離，決定連接長度
+            float m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2;
+            float m_fatherXpos, m_fatherYpos, m_motherXpos, m_motherYpos;
+            List<float> position = new List<float> { };
+            // 父母(男)
+            m_parentLineX1 = x1 - DrawPanelWidth* ShapeDistanceRatio / 2;
+            m_parentLineX2 = x1 + DrawPanelWidth* ShapeDistanceRatio / 2;
+            m_parentLineY1 = y - lineDropY* 2;
+            m_parentLineY2 = y - lineDropY;
+            m_fatherXpos = m_parentLineX1 - ShapeWidth / 2;
+            m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
+            m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight;
+
+            ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            // 連接子女垂直線
+            slashLine = getSlashXY(slashLine, "vertical", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            g.DrawRectangle(pen, m_fatherXpos, m_fatherYpos, ShapeWidth, ShapeHeight);
+            g.DrawEllipse(pen, m_motherXpos, m_motherYpos, ShapeWidth, ShapeHeight);
+            position.Add(m_fatherXpos); position.Add(m_motherXpos); position.Add(m_fatherYpos);
+            return position;
+        }
+
         // ===== 圖像計算
         private void calculateInfo()
-        {            
+        {
             float selfManXpos, selfManYpos, selfWomanXpos, selfWomanYpos;
             float selfPersonLineY1, selfPersonLineY2, selfPersonLineX1, selfPersonLineX2;
             float childLineX1, childLineY1, childLineX2, childLineY2;
+            //float m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2;
+            //float m_fatherXpos, m_fatherYpos, m_motherXpos, m_motherYpos;
+            //float w_parentLineX1, w_parentLineY1, w_parentLineX2, w_parentLineY2;
+            //float w_fatherXpos, w_fatherYpos, w_motherXpos, w_motherYpos;
+            List<float> grandparent_Pos;
             float childYpos;
             // 個案男女的x, y
             selfManXpos = selfShapeRatio_M_x * DrawPanelWidth;
@@ -250,9 +317,27 @@ namespace Genogram
             // 子女
             childLineX1 = selfPersonLineX1;
             childLineX2 = selfPersonLineX2;
-            childLineY1 = selfPersonLineY2 + lineDropY; // 校正線寬造成的重疊區 (lineWidth/2)
+            childLineY1 = selfPersonLineY2 + lineDropY;
             childLineY2 = childLineY1 + lineDropY;
             childYpos = childShapeRatio_y * DrawPanelHeight;
+
+            //// 父母(男)
+            //m_parentLineX1 = selfPersonLineX1 - DrawPanelWidth * otherShapeDistanceRatio / 2;
+            //m_parentLineX2 = selfPersonLineX1 + DrawPanelWidth * otherShapeDistanceRatio / 2;
+            //m_parentLineY1 = selfManYpos - lineDropY * 2;
+            //m_parentLineY2 = selfManYpos - lineDropY;
+            //m_fatherXpos = m_parentLineX1 - ShapeWidth / 2;
+            //m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
+            //m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight / 2 - lineDropY;
+            //// 父母(女)
+            //w_parentLineX1 = selfPersonLineX2 - DrawPanelWidth * otherShapeDistanceRatio / 2;
+            //w_parentLineX2 = selfPersonLineX2 + DrawPanelWidth * otherShapeDistanceRatio / 2;
+            //w_parentLineY1 = selfManYpos - lineDropY * 2;
+            //w_parentLineY2 = selfManYpos - lineDropY;
+            //w_fatherXpos = w_parentLineX1 - ShapeWidth / 2;
+            //w_motherXpos = w_parentLineX2 - ShapeWidth / 2;
+            //w_fatherYpos = w_motherYpos = m_parentLineY1 - ShapeHeight / 2 - lineDropY;
+
 
             // [個案圖形]
             if (man_radioButton.Checked)
@@ -264,7 +349,7 @@ namespace Genogram
                 {
                     g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
                 }
-                
+
             }
 
             if (woman_radioButton.Checked)
@@ -287,23 +372,61 @@ namespace Genogram
             // 同居
             else if (self_cohabit_radioButton.Checked)
             {
-                ConnectShape(DashStylePen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
+                ConnectShape(DashStylePen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
             }
             // 分居
             else if (self_separate_radioButton.Checked)
-            {         
-                ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
-                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
+            {
+                ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
             }
             // 離婚
             else if (self_divorce_radioButton.Checked)
             {
                 ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
-                slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);                
+                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+                slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
             }
 
             // [個案爸媽圖形]
+            //// 爸
+            //if (self_relation_parent_radioButton.Checked || man_radioButton.Checked)
+            //{
+            //    ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            //    // 連接子女垂直線
+            //    slashLine = getSlashXY(slashLine, "vertical", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            //    g.DrawRectangle(pen, m_fatherXpos, m_fatherYpos, ShapeWidth, ShapeHeight);
+            //    g.DrawEllipse(pen, m_motherXpos, m_motherYpos, ShapeWidth, ShapeHeight);
+            //}
+            //// 媽
+            //if (self_relation_parent_radioButton.Checked || woman_radioButton.Checked)
+            //{
+            //    ConnectShape(pen, "bottom", w_parentLineX1, w_parentLineY1, w_parentLineX2, w_parentLineY2);
+            //    // 連接子女垂直線
+            //    slashLine = getSlashXY(slashLine, "vertical", w_parentLineX1, w_parentLineY1, w_parentLineX2, w_parentLineY2);
+            //    g.DrawRectangle(pen, w_fatherXpos, w_fatherYpos, ShapeWidth, ShapeHeight);
+            //    g.DrawEllipse(pen, w_motherXpos, w_motherYpos, ShapeWidth, ShapeHeight);
+            //}
+
+            //if (self_relation_parent_radioButton.Checked || man_radioButton.Checked) DrawParent(selfPersonLineX1, selfManYpos);
+            //if (self_relation_parent_radioButton.Checked || woman_radioButton.Checked) DrawParent(selfPersonLineX2, selfManYpos);
+            if (self_relation_parent_radioButton.Checked)
+            {
+                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio); // 男方
+                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio); // 女方
+            }
+            else if (man_radioButton.Checked)
+            {
+                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2);
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+            }
+            else if (woman_radioButton.Checked)
+            {
+                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2);
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+            }
 
 
             // [子女圖形]
@@ -333,17 +456,17 @@ namespace Genogram
                     // selfShapeRatio_M_x 先減個案男女距離的一半
                     if (childInfo.totalNumber == 1)
                     {
-                        childInitialRatio_x = selfShapeRatio_M_x - selfShapeDistanceRatio / 2 + selfShapeDistanceRatio;
+                        childInitialRatio_x = selfShapeRatio_M_x + selfShapeDistanceRatio / 2;
                     }
                     else
                     {
                         if (childInfo.marriage.Count()==2 && childInfo.marriage[0] == "未")
                         {
-                            childInitialRatio_x = selfShapeRatio_M_x - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                            childInitialRatio_x = selfShapeRatio_M_x + selfShapeDistanceRatio / 2 - otherShapeDistanceRatio / 2 - (childAddMarriageNum / 2 - 1) * otherShapeDistanceRatio;
                         }
                         else
                         {
-                            childInitialRatio_x = selfShapeRatio_M_x - selfShapeDistanceRatio / 2 - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                            childInitialRatio_x = selfShapeRatio_M_x + selfShapeDistanceRatio / 2 - (childAddMarriageNum / 2) * otherShapeDistanceRatio;
                         }
                         
                     }
@@ -353,11 +476,12 @@ namespace Genogram
                 {
                     if (childInfo.totalNumber == 1)
                     {
-                        childInitialRatio_x = selfShapeRatio_M_x - selfShapeDistanceRatio / 2 + selfShapeDistanceRatio;
+                        childInitialRatio_x = selfShapeRatio_M_x + selfShapeDistanceRatio / 2;
                     }
                     else
                     {
-                        childInitialRatio_x = selfShapeRatio_M_x - (childAddMarriageNum / 2 - 1) * selfShapeDistanceRatio;
+                        // selfShapeRatio_M_x + selfShapeDistanceRatio/2 → 移到男女正中間 → - otherShapeDistanceRatio / 2 → 往前校正到偶數初始位置 →  - (childAddMarriageNum / 2 - 1) * otherShapeDistanceRatio → 剩下的正常加上距離 
+                        childInitialRatio_x = selfShapeRatio_M_x + selfShapeDistanceRatio/2 - otherShapeDistanceRatio / 2 - (childAddMarriageNum / 2 - 1) * otherShapeDistanceRatio;
                     }
                     
                 }

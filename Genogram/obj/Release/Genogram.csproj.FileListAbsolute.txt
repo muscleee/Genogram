@@ -1,0 +1,9 @@
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Release\Genogram.exe.config
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Release\Genogram.exe
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\bin\Release\Genogram.pdb
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.Genogram.resources
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.Properties.Resources.resources
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.csproj.GenerateResource.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.csproj.CoreCompileInputs.cache
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.exe
+C:\Users\USER\Downloads\Genogram-main(1)\Genogram-main\Genogram\obj\Release\Genogram.pdb
