@@ -25,6 +25,7 @@ namespace Genogram
         SelfInfo selfInfo;
         ChildInfo childInfo;
         ParentInfo parentInfo;
+        GrandParentInfo grandparentInfo;
         SlashLine slashLine;
         float DrawPanelWidth, DrawPanelHeight, ShapeWidth, ShapeHeight;
         float lineDropY, lineWidth;
@@ -48,6 +49,7 @@ namespace Genogram
             selfInfo = new SelfInfo();
             childInfo = new ChildInfo();
             parentInfo = new ParentInfo();
+            grandparentInfo = new GrandParentInfo();
             slashLine = new SlashLine();
 
         }
@@ -59,6 +61,7 @@ namespace Genogram
             self_married_radioButton.Checked = true;
             paternal_married_radioButton.Checked = true;
             maternal_married_radioButton.Checked = true;
+            parent_married_radioButton.Checked = true;
         }
 
         public void DrawShapeComponent()
@@ -211,8 +214,9 @@ namespace Genogram
                 selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
 
                 paternal_marriage_label.Text = "男方長輩婚姻 : ";
-                maternal_marriage_label.Visible = true;
-                maternal_marriage_panel.Visible = true;
+                maternal_marriage_label.Text = "女方長輩婚姻 : ";
+                parent_marriage_label.Visible = false;
+                parent_marriage_panel.Visible = false;
 
                 if (!(self_married_radioButton.Checked || self_cohabit_radioButton.Checked ||
                       self_separate_radioButton.Checked || self_divorce_radioButton.Checked)) self_married_radioButton.Checked = true;
@@ -238,9 +242,10 @@ namespace Genogram
                 selfShapeRatio_W_x = 0.55f;
                 selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
 
-                paternal_marriage_label.Text = "　　爸媽婚姻 : ";
-                maternal_marriage_label.Visible = false;
-                maternal_marriage_panel.Visible = false;
+                paternal_marriage_label.Text = "父方長輩婚姻 : ";
+                maternal_marriage_label.Text = "母方長輩婚姻 : ";
+                parent_marriage_label.Visible = true;
+                parent_marriage_panel.Visible = true;
             }
         }
 
@@ -263,7 +268,7 @@ namespace Genogram
             //g.DrawEllipse(pen, 3000, 500, 100, 100);
         }
 
-        private List<float> DrawParent(float x1, float y, float ShapeDistanceRatio)
+        private List<float> DrawParent(float x1, float y, float ShapeDistanceRatio, string MarriageType)
         {
             // x : 孩子圖形中心點x座標, y : 孩子圖形左上y座標, ShapeDistanceRatio : 男女距離，決定連接長度
             float m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2;
@@ -278,13 +283,72 @@ namespace Genogram
             m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
             m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight;
 
-            ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            //ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            ConnectMarriageLine(MarriageType, m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+
             // 連接子女垂直線
             slashLine = getSlashXY(slashLine, "vertical", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
             g.DrawRectangle(pen, m_fatherXpos, m_fatherYpos, ShapeWidth, ShapeHeight);
             g.DrawEllipse(pen, m_motherXpos, m_motherYpos, ShapeWidth, ShapeHeight);
             position.Add(m_fatherXpos); position.Add(m_motherXpos); position.Add(m_fatherYpos);
             return position;
+        }
+
+        private void ConnectMarriageLine(string type, float x1, float y1, float x2, float y2)
+        {
+            if (type == "結")
+            {
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
+            }
+            // 同居
+            else if (type == "同")
+            {
+                ConnectShape(DashStylePen, "bottom", x1, y1, x2, y2);
+            }
+            // 分居
+            else if (type == "分")
+            {
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "backslash", x1, y1, x2, y2);
+            }
+            // 離婚
+            else if (type == "離")
+            {
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "backslash", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "slash", x1, y1, x2, y2);
+
+            }
+        }
+
+        private string CheckMarriage(bool married, bool cohabit, bool separate, bool divorce)
+        {
+            string type;
+            if (married)
+            {
+                type = "結";
+            }
+            // 同居
+            else if (cohabit)
+            {
+                type = "同";
+            }
+            // 分居
+            else if (separate)
+            {
+                type = "分";
+            }
+            // 離婚
+            else if (divorce)
+            {
+                type = "離";
+            }
+            else
+            {
+                type = "未";
+            }
+
+            return type;
         }
 
         // ===== 圖像計算
@@ -321,23 +385,6 @@ namespace Genogram
             childLineY2 = childLineY1 + lineDropY;
             childYpos = childShapeRatio_y * DrawPanelHeight;
 
-            //// 父母(男)
-            //m_parentLineX1 = selfPersonLineX1 - DrawPanelWidth * otherShapeDistanceRatio / 2;
-            //m_parentLineX2 = selfPersonLineX1 + DrawPanelWidth * otherShapeDistanceRatio / 2;
-            //m_parentLineY1 = selfManYpos - lineDropY * 2;
-            //m_parentLineY2 = selfManYpos - lineDropY;
-            //m_fatherXpos = m_parentLineX1 - ShapeWidth / 2;
-            //m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
-            //m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight / 2 - lineDropY;
-            //// 父母(女)
-            //w_parentLineX1 = selfPersonLineX2 - DrawPanelWidth * otherShapeDistanceRatio / 2;
-            //w_parentLineX2 = selfPersonLineX2 + DrawPanelWidth * otherShapeDistanceRatio / 2;
-            //w_parentLineY1 = selfManYpos - lineDropY * 2;
-            //w_parentLineY2 = selfManYpos - lineDropY;
-            //w_fatherXpos = w_parentLineX1 - ShapeWidth / 2;
-            //w_motherXpos = w_parentLineX2 - ShapeWidth / 2;
-            //w_fatherYpos = w_motherYpos = m_parentLineY1 - ShapeHeight / 2 - lineDropY;
-
 
             // [個案圖形]
             if (man_radioButton.Checked)
@@ -365,67 +412,80 @@ namespace Genogram
 
             // [個案婚姻連線]
             // 結婚
-            if (self_married_radioButton.Checked)
-            {
-                ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            }
-            // 同居
-            else if (self_cohabit_radioButton.Checked)
-            {
-                ConnectShape(DashStylePen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            }
-            // 分居
-            else if (self_separate_radioButton.Checked)
-            {
-                ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            }
-            // 離婚
-            else if (self_divorce_radioButton.Checked)
-            {
-                ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-                slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-                slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            }
+            //if (self_married_radioButton.Checked)
+            //{
+            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //}
+            //// 同居
+            //else if (self_cohabit_radioButton.Checked)
+            //{
+            //    ConnectShape(DashStylePen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //}
+            //// 分居
+            //else if (self_separate_radioButton.Checked)
+            //{
+            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //    slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //}
+            //// 離婚
+            //else if (self_divorce_radioButton.Checked)
+            //{
+            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //    slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //    slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+            //}
+
+
+            //if (self_married_radioButton.Checked)
+            //{
+            //    selfInfo.marriage = "結";
+            //}
+            //// 同居
+            //else if (self_cohabit_radioButton.Checked)
+            //{
+            //    selfInfo.marriage = "同";
+            //}
+            //// 分居
+            //else if (self_separate_radioButton.Checked)
+            //{
+            //    selfInfo.marriage = "分";
+            //}
+            //// 離婚
+            //else if (self_divorce_radioButton.Checked)
+            //{
+            //    selfInfo.marriage = "離";
+            //}
+            //else
+            //{
+            //    selfInfo.marriage = "未";
+            //}
+            selfInfo.marriage = CheckMarriage(self_married_radioButton.Checked, self_cohabit_radioButton.Checked, self_separate_radioButton.Checked, self_divorce_radioButton.Checked);
+            ConnectMarriageLine(selfInfo.marriage, selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
+
 
             // [個案爸媽圖形]
-            //// 爸
-            //if (self_relation_parent_radioButton.Checked || man_radioButton.Checked)
-            //{
-            //    ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
-            //    // 連接子女垂直線
-            //    slashLine = getSlashXY(slashLine, "vertical", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
-            //    g.DrawRectangle(pen, m_fatherXpos, m_fatherYpos, ShapeWidth, ShapeHeight);
-            //    g.DrawEllipse(pen, m_motherXpos, m_motherYpos, ShapeWidth, ShapeHeight);
-            //}
-            //// 媽
-            //if (self_relation_parent_radioButton.Checked || woman_radioButton.Checked)
-            //{
-            //    ConnectShape(pen, "bottom", w_parentLineX1, w_parentLineY1, w_parentLineX2, w_parentLineY2);
-            //    // 連接子女垂直線
-            //    slashLine = getSlashXY(slashLine, "vertical", w_parentLineX1, w_parentLineY1, w_parentLineX2, w_parentLineY2);
-            //    g.DrawRectangle(pen, w_fatherXpos, w_fatherYpos, ShapeWidth, ShapeHeight);
-            //    g.DrawEllipse(pen, w_motherXpos, w_motherYpos, ShapeWidth, ShapeHeight);
-            //}
+            grandparentInfo.paternal_marriage = CheckMarriage(paternal_married_radioButton.Checked, paternal_cohabit_radioButton.Checked, paternal_separate_radioButton.Checked, paternal_divorce_radioButton.Checked);
+            grandparentInfo.maternal_marriage = CheckMarriage(maternal_married_radioButton.Checked, maternal_cohabit_radioButton.Checked, maternal_separate_radioButton.Checked, maternal_divorce_radioButton.Checked);
 
-            //if (self_relation_parent_radioButton.Checked || man_radioButton.Checked) DrawParent(selfPersonLineX1, selfManYpos);
-            //if (self_relation_parent_radioButton.Checked || woman_radioButton.Checked) DrawParent(selfPersonLineX2, selfManYpos);
             if (self_relation_parent_radioButton.Checked)
-            {
-                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio); // 男方
-                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio); // 女方
+            {               
+                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 男方爸媽
+                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 女方爸媽
             }
             else if (man_radioButton.Checked)
-            {
-                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2);
-                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
-                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+            {                
+                parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
+                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2, parentInfo.marriage); //爸媽
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 爺爺 阿嬤
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 外公 外婆
             }
             else if (woman_radioButton.Checked)
             {
-                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2);
-                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
-                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio);
+
+                parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
+                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2, parentInfo.marriage); //爸媽
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 爺爺 阿嬤
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 外公 外婆
             }
 
 
@@ -548,28 +608,29 @@ namespace Genogram
                 {
                     int idx = i * 2;
                     string item = childInfo.marriageType[i];
-                    if (item == "結")
-                    {
-                        ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    }
-                    // 同居
-                    else if (item == "同")
-                    {
-                        ConnectShape(DashStylePen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    }
-                    // 分居
-                    else if (item == "分")
-                    {
-                        ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                        slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    }
-                    // 離婚
-                    else if (item == "離")
-                    {
-                        ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                        slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                        slashLine = getSlashXY(slashLine, "slash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    }
+                    ConnectMarriageLine(item, childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //if (item == "結")
+                    //{
+                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //}
+                    //// 同居
+                    //else if (item == "同")
+                    //{
+                    //    ConnectShape(DashStylePen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //}
+                    //// 分居
+                    //else if (item == "分")
+                    //{
+                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //    slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //}
+                    //// 離婚
+                    //else if (item == "離")
+                    //{
+                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //    slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //    slashLine = getSlashXY(slashLine, "slash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    //}
                 }
 
             }
@@ -666,6 +727,13 @@ namespace Genogram
         {
             public int member;
             public string marriage;
+        }
+
+        struct GrandParentInfo
+        {
+            public int member;
+            public string paternal_marriage;  //父方
+            public string maternal_marriage;  //母方
         }
 
         struct SlashLine
