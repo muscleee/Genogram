@@ -17,6 +17,7 @@ namespace Genogram
         Graphics g;
         Pen pen, KeyPersonPen, DashStylePen;
         Brush KeyPersonBush;
+        Brush testPersonBush;
         Color drawKeyPersonColor = Color.Red;
         Color drawColor = Color.Black;
         bool isMouseDown;
@@ -34,17 +35,24 @@ namespace Genogram
         float selfShapeDistanceRatio;
         float childInitialRatio_x;
         float slashWidth, slashHeight;
+        MovePoint originalPoint;
+        Rectangle rect, rect2;
+        List<Rectangle> rects = new List<Rectangle>();
+        List<RectangleF> recRects = new List<RectangleF>();
+        Rectangle tmpRect;
+        RectangleF[] tmpRectF = new RectangleF[1];
+        RectangleF[] changeRectF = new RectangleF[1];
 
         public Genogram()
         {
             InitializeComponent();
-            iniControlInfo();
+            IniControlInfo();
             DrawShapeComponent();
 
-            iniInfo();
+            IniInfo();
         }
 
-        public void iniInfo()
+        public void IniInfo()
         {
             selfInfo = new SelfInfo();
             childInfo = new ChildInfo();
@@ -52,10 +60,20 @@ namespace Genogram
             grandparentInfo = new GrandParentInfo();
             slashLine = new SlashLine();
 
+            originalPoint = new MovePoint();
+            rect = new Rectangle(200, 200, 50, 50);
+            rect2 = new Rectangle(400, 400, 50, 50);
+            rects.Add(rect); rects.Add(rect2);
+
         }
-        public void iniControlInfo()
+        public void IniControlInfo()
         {
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
             ShapeSize_textBox.Text = "50";
+            //Drag_radioButton.Checked = true;
             man_radioButton.Checked = true;
             self_relation_parent_radioButton.Checked = true;
             self_married_radioButton.Checked = true;
@@ -64,10 +82,14 @@ namespace Genogram
             parent_married_radioButton.Checked = true;
         }
 
+
+
+
         public void DrawShapeComponent()
         {
             lineWidth = 3;
-            g = DrawPanel.CreateGraphics();
+            //g = DrawPanel.CreateGraphics();
+            g = Graphics.FromHwnd(DrawPanel.Handle);
             // 一般畫筆
             pen = new Pen(drawColor, lineWidth);
             // 個案畫筆
@@ -76,8 +98,9 @@ namespace Genogram
             DashStylePen = new Pen(drawColor, lineWidth);
             //DashStylePen.DashStyle = DashStyle.Custom;
             DashStylePen.DashPattern = new float[] { 1f, 1f };
-
+            // 個案顏色
             KeyPersonBush = new SolidBrush(Color.Gray);
+            testPersonBush = new SolidBrush(Color.Red);
 
             // 畫布長寬
             DrawPanelWidth = DrawPanel.Width;
@@ -105,6 +128,11 @@ namespace Genogram
 
         private void DrawPanel_Paint(object sender, PaintEventArgs e)
         {
+            foreach (var item in rects)
+            {
+                g.DrawRectangle(pen, item);
+            }
+            
             if (points.Count != 0)
             {
                 Point lastPoint, currentPoint;
@@ -119,7 +147,13 @@ namespace Genogram
                     }
                 }
             }
-
+            if (changeRectF[0].X != 0)
+            {
+                g.FillRectangle(testPersonBush, changeRectF[0]);
+                g.DrawRectangles(pen, changeRectF);
+            }
+            //CalculateInfo();
+            
         }
 
         private void DrawPanel_MouseDown(object sender, MouseEventArgs e)
@@ -133,6 +167,10 @@ namespace Genogram
                 g.Clear(Color.White);
 
             }
+
+            originalPoint.X = e.X;
+            originalPoint.Y = e.Y;
+
         }
 
         private void DrawPanel_MouseUp(object sender, MouseEventArgs e)
@@ -147,6 +185,43 @@ namespace Genogram
             {
                 points.Add(e.Location);
                 g.DrawLine(pen, points[points.Count - 2], points[points.Count - 1]);
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                List<Rectangle> rect_ = rects.Where(item => item.X < e.X && e.X < item.X + 50 &&item.Y < e.Y && e.Y < item.Y + 50).ToList();
+                if (rect_.Count > 0)
+                {
+                    tmpRect = rect_[0];
+                    rects.Remove(rect_[0]);
+
+                    // Increment rectangle-location by mouse-location delta.
+                    tmpRect.X += e.X - originalPoint.X;
+                    tmpRect.Y += e.Y - originalPoint.Y;
+                    rects.Add(tmpRect);
+                    // Re-calibrate on each move operation.
+                    originalPoint = new MovePoint { X = e.X, Y = e.Y };
+
+                    this.Invalidate(true);
+                    //DrawPanel.Refresh();
+
+                }
+                List<RectangleF> rect__ = recRects.Where(item => item.X < e.X && e.X < item.X + 50 && item.Y < e.Y && e.Y < item.Y + 50).ToList();
+                if (rect__.Count > 0)
+                {
+                    changeRectF[0] = rect__[0];
+                    recRects.Remove(rect__[0]);
+
+                    changeRectF[0].X += e.X - originalPoint.X;
+                    changeRectF[0].Y += e.Y - originalPoint.Y;
+                    recRects.Add(changeRectF[0]);
+
+                    originalPoint = new MovePoint { X = e.X, Y = e.Y };
+
+                    this.Invalidate(true);
+                    //DrawPanel.Refresh();
+
+                }
             }
         }
 
@@ -263,7 +338,7 @@ namespace Genogram
         private void execute_button_Click(object sender, EventArgs e)
         {
             g.Clear(Color.White);
-            calculateInfo();
+            CalculateInfo();
 
             //g.DrawEllipse(pen, 3000, 500, 100, 100);
         }
@@ -352,7 +427,7 @@ namespace Genogram
         }
 
         // ===== 圖像計算
-        private void calculateInfo()
+        private void CalculateInfo()
         {
             float selfManXpos, selfManYpos, selfWomanXpos, selfWomanYpos;
             float selfPersonLineY1, selfPersonLineY2, selfPersonLineX1, selfPersonLineX2;
@@ -390,11 +465,15 @@ namespace Genogram
             if (man_radioButton.Checked)
             {
                 selfInfo.member += 1;
-                g.FillRectangle(KeyPersonBush, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
-                g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
+                tmpRectF[0] = new RectangleF(selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
+                recRects.Add(tmpRectF[0]);
+                g.FillRectangle(KeyPersonBush, tmpRectF[0]);
+                g.DrawRectangles(pen, tmpRectF);
                 if (!self_unmarried_radioButton.Checked)
                 {
-                    g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
+                    tmpRectF[0] = new RectangleF(selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
+                    recRects.Add(tmpRectF[0]);
+                    g.DrawEllipse(pen, tmpRectF[0]);                    
                 }
 
             }
@@ -411,54 +490,6 @@ namespace Genogram
             }
 
             // [個案婚姻連線]
-            // 結婚
-            //if (self_married_radioButton.Checked)
-            //{
-            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //}
-            //// 同居
-            //else if (self_cohabit_radioButton.Checked)
-            //{
-            //    ConnectShape(DashStylePen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //}
-            //// 分居
-            //else if (self_separate_radioButton.Checked)
-            //{
-            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //    slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //}
-            //// 離婚
-            //else if (self_divorce_radioButton.Checked)
-            //{
-            //    ConnectShape(pen, "bottom", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //    slashLine = getSlashXY(slashLine, "backslash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //    slashLine = getSlashXY(slashLine, "slash", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
-            //}
-
-
-            //if (self_married_radioButton.Checked)
-            //{
-            //    selfInfo.marriage = "結";
-            //}
-            //// 同居
-            //else if (self_cohabit_radioButton.Checked)
-            //{
-            //    selfInfo.marriage = "同";
-            //}
-            //// 分居
-            //else if (self_separate_radioButton.Checked)
-            //{
-            //    selfInfo.marriage = "分";
-            //}
-            //// 離婚
-            //else if (self_divorce_radioButton.Checked)
-            //{
-            //    selfInfo.marriage = "離";
-            //}
-            //else
-            //{
-            //    selfInfo.marriage = "未";
-            //}
             selfInfo.marriage = CheckMarriage(self_married_radioButton.Checked, self_cohabit_radioButton.Checked, self_separate_radioButton.Checked, self_divorce_radioButton.Checked);
             ConnectMarriageLine(selfInfo.marriage, selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
 
@@ -609,28 +640,6 @@ namespace Genogram
                     int idx = i * 2;
                     string item = childInfo.marriageType[i];
                     ConnectMarriageLine(item, childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //if (item == "結")
-                    //{
-                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //}
-                    //// 同居
-                    //else if (item == "同")
-                    //{
-                    //    ConnectShape(DashStylePen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //}
-                    //// 分居
-                    //else if (item == "分")
-                    //{
-                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //    slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //}
-                    //// 離婚
-                    //else if (item == "離")
-                    //{
-                    //    ConnectShape(pen, "bottom", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //    slashLine = getSlashXY(slashLine, "backslash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //    slashLine = getSlashXY(slashLine, "slash", childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
-                    //}
                 }
 
             }
@@ -742,6 +751,12 @@ namespace Genogram
             public float y1;
             public float x2;
             public float y2;
+        }
+
+        struct MovePoint
+        {
+            public int X;
+            public int Y;
         }
 
     }
