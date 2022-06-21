@@ -30,7 +30,6 @@
         {
             this.DrawPanel = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.Draw_radioButton = new System.Windows.Forms.RadioButton();
             this.Clear_radioButton = new System.Windows.Forms.RadioButton();
             this.Drag_radioButton = new System.Windows.Forms.RadioButton();
             this.execute_button = new System.Windows.Forms.Button();
@@ -69,6 +68,24 @@
             this.maternal_separate_radioButton = new System.Windows.Forms.RadioButton();
             this.maternal_cohabit_radioButton = new System.Windows.Forms.RadioButton();
             this.maternal_divorce_radioButton = new System.Windows.Forms.RadioButton();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
+            this.checkBox10 = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.checkBox12 = new System.Windows.Forms.CheckBox();
+            this.checkBox13 = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.checkBox14 = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBox15 = new System.Windows.Forms.CheckBox();
+            this.panel10 = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.addChild_unmarried_button = new System.Windows.Forms.Button();
             this.addChild_divorce_button = new System.Windows.Forms.Button();
@@ -83,8 +100,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.ShapeSize_textBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.age_textBox = new System.Windows.Forms.TextBox();
-            this.status_comboBox = new System.Windows.Forms.ComboBox();
+            this.Draw_radioButton = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -94,6 +110,9 @@
             this.parent_marriage_panel.SuspendLayout();
             this.paternal_marriage_panel.SuspendLayout();
             this.maternal_marriage_panel.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel10.SuspendLayout();
             this.panel11.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,18 +137,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(110, 109);
             this.panel1.TabIndex = 1;
-            // 
-            // Draw_radioButton
-            // 
-            this.Draw_radioButton.AutoSize = true;
-            this.Draw_radioButton.Location = new System.Drawing.Point(20, 47);
-            this.Draw_radioButton.Name = "Draw_radioButton";
-            this.Draw_radioButton.Size = new System.Drawing.Size(48, 16);
-            this.Draw_radioButton.TabIndex = 3;
-            this.Draw_radioButton.TabStop = true;
-            this.Draw_radioButton.Text = "Draw";
-            this.Draw_radioButton.UseVisualStyleBackColor = true;
-            this.Draw_radioButton.CheckedChanged += new System.EventHandler(this.Draw_radioButton_CheckedChanged);
             // 
             // Clear_radioButton
             // 
@@ -345,7 +352,7 @@
             this.panel3.Controls.Add(this.paternal_marriage_label);
             this.panel3.Controls.Add(this.paternal_marriage_panel);
             this.panel3.Controls.Add(this.maternal_marriage_panel);
-            this.panel3.Location = new System.Drawing.Point(513, 29);
+            this.panel3.Location = new System.Drawing.Point(614, 32);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(338, 97);
             this.panel3.TabIndex = 9;
@@ -542,6 +549,191 @@
             this.maternal_divorce_radioButton.Text = "離異";
             this.maternal_divorce_radioButton.UseVisualStyleBackColor = true;
             // 
+            // comboBox4
+            // 
+            this.comboBox4.AutoCompleteCustomSource.AddRange(new string[] {
+            "已婚",
+            "離婚"});
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(167, 179);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(51, 20);
+            this.comboBox4.TabIndex = 10;
+            this.comboBox4.Text = "已婚";
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(113, 181);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(48, 16);
+            this.checkBox4.TabIndex = 9;
+            this.checkBox4.Text = "未婚";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(64, 183);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 12);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "婚姻 :";
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.checkBox8);
+            this.panel4.Controls.Add(this.checkBox9);
+            this.panel4.Controls.Add(this.checkBox10);
+            this.panel4.Controls.Add(this.label6);
+            this.panel4.Controls.Add(this.checkBox11);
+            this.panel4.Controls.Add(this.label7);
+            this.panel4.Location = new System.Drawing.Point(224, 53);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(224, 68);
+            this.panel4.TabIndex = 15;
+            // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Location = new System.Drawing.Point(161, 37);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(48, 16);
+            this.checkBox8.TabIndex = 13;
+            this.checkBox8.Text = "離異";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox9
+            // 
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.Location = new System.Drawing.Point(106, 37);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(48, 16);
+            this.checkBox9.TabIndex = 12;
+            this.checkBox9.Text = "已婚";
+            this.checkBox9.UseVisualStyleBackColor = true;
+            // 
+            // checkBox10
+            // 
+            this.checkBox10.AutoSize = true;
+            this.checkBox10.Location = new System.Drawing.Point(161, 12);
+            this.checkBox10.Name = "checkBox10";
+            this.checkBox10.Size = new System.Drawing.Size(48, 16);
+            this.checkBox10.TabIndex = 11;
+            this.checkBox10.Text = "離異";
+            this.checkBox10.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 41);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(83, 12);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "女方長輩婚姻 :";
+            // 
+            // checkBox11
+            // 
+            this.checkBox11.AutoSize = true;
+            this.checkBox11.Location = new System.Drawing.Point(106, 12);
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.Size = new System.Drawing.Size(48, 16);
+            this.checkBox11.TabIndex = 10;
+            this.checkBox11.Text = "已婚";
+            this.checkBox11.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 14);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(83, 12);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "男方長輩婚姻 :";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.checkBox12);
+            this.panel5.Controls.Add(this.checkBox13);
+            this.panel5.Controls.Add(this.label8);
+            this.panel5.Controls.Add(this.checkBox14);
+            this.panel5.Controls.Add(this.label9);
+            this.panel5.Controls.Add(this.checkBox15);
+            this.panel5.Location = new System.Drawing.Point(32, 53);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(170, 68);
+            this.panel5.TabIndex = 14;
+            // 
+            // checkBox12
+            // 
+            this.checkBox12.AutoSize = true;
+            this.checkBox12.Location = new System.Drawing.Point(111, 40);
+            this.checkBox12.Name = "checkBox12";
+            this.checkBox12.Size = new System.Drawing.Size(48, 16);
+            this.checkBox12.TabIndex = 9;
+            this.checkBox12.Text = "離異";
+            this.checkBox12.UseVisualStyleBackColor = true;
+            // 
+            // checkBox13
+            // 
+            this.checkBox13.AutoSize = true;
+            this.checkBox13.Location = new System.Drawing.Point(56, 40);
+            this.checkBox13.Name = "checkBox13";
+            this.checkBox13.Size = new System.Drawing.Size(48, 16);
+            this.checkBox13.TabIndex = 6;
+            this.checkBox13.Text = "已婚";
+            this.checkBox13.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 42);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 12);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "婚姻 :";
+            // 
+            // checkBox14
+            // 
+            this.checkBox14.AutoSize = true;
+            this.checkBox14.Location = new System.Drawing.Point(56, 12);
+            this.checkBox14.Name = "checkBox14";
+            this.checkBox14.Size = new System.Drawing.Size(36, 16);
+            this.checkBox14.TabIndex = 2;
+            this.checkBox14.Text = "男";
+            this.checkBox14.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 14);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 12);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "個案 :";
+            // 
+            // checkBox15
+            // 
+            this.checkBox15.AutoSize = true;
+            this.checkBox15.Location = new System.Drawing.Point(111, 12);
+            this.checkBox15.Name = "checkBox15";
+            this.checkBox15.Size = new System.Drawing.Size(36, 16);
+            this.checkBox15.TabIndex = 3;
+            this.checkBox15.Text = "女";
+            this.checkBox15.UseVisualStyleBackColor = true;
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.panel5);
+            this.panel10.Controls.Add(this.panel4);
+            this.panel10.Controls.Add(this.label5);
+            this.panel10.Controls.Add(this.comboBox4);
+            this.panel10.Controls.Add(this.checkBox4);
+            this.panel10.Location = new System.Drawing.Point(987, 48);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(421, 257);
+            this.panel10.TabIndex = 16;
+            // 
             // panel11
             // 
             this.panel11.Controls.Add(this.addChild_unmarried_button);
@@ -679,34 +871,28 @@
             this.label12.TabIndex = 21;
             this.label12.Text = "大小 :";
             // 
-            // age_textBox
+            // Draw_radioButton
             // 
-            this.age_textBox.Location = new System.Drawing.Point(881, 36);
-            this.age_textBox.Name = "age_textBox";
-            this.age_textBox.Size = new System.Drawing.Size(100, 22);
-            this.age_textBox.TabIndex = 23;
-            this.age_textBox.TextChanged += new System.EventHandler(this.age_textBox_TextChanged);
-            // 
-            // status_comboBox
-            // 
-            this.status_comboBox.FormattingEnabled = true;
-            this.status_comboBox.Location = new System.Drawing.Point(881, 75);
-            this.status_comboBox.Name = "status_comboBox";
-            this.status_comboBox.Size = new System.Drawing.Size(100, 20);
-            this.status_comboBox.TabIndex = 24;
-            this.status_comboBox.SelectedIndexChanged += new System.EventHandler(this.status_comboBox_SelectedIndexChanged);
+            this.Draw_radioButton.AutoSize = true;
+            this.Draw_radioButton.Location = new System.Drawing.Point(20, 47);
+            this.Draw_radioButton.Name = "Draw_radioButton";
+            this.Draw_radioButton.Size = new System.Drawing.Size(48, 16);
+            this.Draw_radioButton.TabIndex = 3;
+            this.Draw_radioButton.TabStop = true;
+            this.Draw_radioButton.Text = "Draw";
+            this.Draw_radioButton.UseVisualStyleBackColor = true;
+            this.Draw_radioButton.CheckedChanged += new System.EventHandler(this.Draw_radioButton_CheckedChanged);
             // 
             // Genogram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1031, 822);
-            this.Controls.Add(this.status_comboBox);
-            this.Controls.Add(this.age_textBox);
+            this.ClientSize = new System.Drawing.Size(1014, 822);
             this.Controls.Add(this.ShapeSize_textBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.panel11);
+            this.Controls.Add(this.panel10);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.execute_button);
@@ -732,6 +918,12 @@
             this.paternal_marriage_panel.PerformLayout();
             this.maternal_marriage_panel.ResumeLayout(false);
             this.maternal_marriage_panel.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.panel10.ResumeLayout(false);
+            this.panel10.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
             this.ResumeLayout(false);
@@ -753,11 +945,29 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label maternal_marriage_label;
         private System.Windows.Forms.Label paternal_marriage_label;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.CheckBox checkBox9;
+        private System.Windows.Forms.CheckBox checkBox10;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox checkBox11;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.CheckBox checkBox12;
+        private System.Windows.Forms.CheckBox checkBox13;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox checkBox14;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox checkBox15;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.RadioButton self_divorce_radioButton;
         private System.Windows.Forms.RadioButton self_married_radioButton;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RadioButton Drag_radioButton;
+        private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.RadioButton self_separate_radioButton;
         private System.Windows.Forms.RadioButton self_cohabit_radioButton;
         private System.Windows.Forms.Panel panel11;
@@ -796,8 +1006,6 @@
         private System.Windows.Forms.RadioButton parent_cohabit_radioButton;
         private System.Windows.Forms.RadioButton parent_divorce_radioButton;
         private System.Windows.Forms.RadioButton Draw_radioButton;
-        private System.Windows.Forms.TextBox age_textBox;
-        private System.Windows.Forms.ComboBox status_comboBox;
     }
 }
 

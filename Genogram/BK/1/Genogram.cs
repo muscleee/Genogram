@@ -20,7 +20,6 @@ namespace Genogram
         Brush testPersonBush;
         Color drawKeyPersonColor = Color.Red;
         Color drawColor = Color.Black;
-        Font font;
         bool isMouseDown;
         string DrawType;
         List<Point> points = new List<Point>();
@@ -34,15 +33,17 @@ namespace Genogram
         float lineDropY, lineWidth;
         float selfShapeRatio_y, childShapeRatio_y, parentShapeRatio_y, selfShapeRatio_M_x, selfShapeRatio_W_x;
         float otherShapeRatio_W_x, otherShapeRatio_M_x, otherShapeDistanceRatio, twoShapeDistanceRatio;
-        float lineX1, lineY1, lineX2, lineY2;
         float selfShapeDistanceRatio;
         float childInitialRatio_x;
         float slashWidth, slashHeight;
         MovePoint originalPoint;
-        Rectangle rect, rect2, tmpRect;
+        Rectangle rect, rect2;
         List<Rectangle> rects = new List<Rectangle>();
+        Rectangle tmpRect;
         List<RectangleF> RecordAllRectF = new List<RectangleF>();
-        List<ShapeInfo> findShapeInfo = new List<ShapeInfo>();
+        List<ShapeInfo> findRectF = new List<ShapeInfo>();
+        RectangleF[] tmpRectF = new RectangleF[1];
+        RectangleF[] changeRectF = new RectangleF[1];
         List<ShapeInfo> RecordShapeInfo = new List<ShapeInfo>();
 
         public Genogram()
@@ -105,8 +106,6 @@ namespace Genogram
             KeyPersonBush = new SolidBrush(Color.Gray);
             testPersonBush = new SolidBrush(Color.Red);
 
-            font = new Font("Times New Roman", 24, FontStyle.Bold, GraphicsUnit.Pixel);
-
             // 畫布長寬
             DrawPanelWidth = DrawPanel.Width;
             DrawPanelHeight = DrawPanel.Height;
@@ -133,10 +132,10 @@ namespace Genogram
 
         private void DrawPanel_Paint(object sender, PaintEventArgs e)
         {
-            //foreach (var item in rects)
-            //{
-            //    g.DrawRectangle(pen, item);
-            //}
+            foreach (var item in rects)
+            {
+                g.DrawRectangle(pen, item);
+            }
             
             if (points.Count != 0)
             {
@@ -152,67 +151,24 @@ namespace Genogram
                     }
                 }
             }
-            //CalculateInfo();
-            //if (findShapeInfo.Count > 0)
-            //{
-            //    if (findShapeInfo[0].gender == "男")
-            //    {
-            //        g.FillRectangle(testPersonBush, findShapeInfo[0].x1, findShapeInfo[0].y1, ShapeWidth, ShapeHeight);
-            //        g.DrawRectangle(pen, findShapeInfo[0].x1, findShapeInfo[0].y1, ShapeWidth, ShapeHeight);
-            //        e.Graphics.DrawString(age_textBox.Text, font, Brushes.Black, findShapeInfo[0].x1 + ShapeWidth * 0.3f, findShapeInfo[0].y1 + ShapeHeight * 0.3f);
-            //    }
-            //    else if (findShapeInfo[0].gender == "女")
-            //    {
-            //        g.FillEllipse(testPersonBush, findShapeInfo[0].x1, findShapeInfo[0].y1, ShapeWidth, ShapeHeight);
-            //        g.DrawEllipse(pen, findShapeInfo[0].x1, findShapeInfo[0].y1, ShapeWidth, ShapeHeight);
-            //        e.Graphics.DrawString(age_textBox.Text, font, Brushes.Black, findShapeInfo[0].x1 + ShapeWidth * 0.3f, findShapeInfo[0].y1 + ShapeHeight * 0.3f);
-            //    }
-            //}
-
-            //g.Clear(Color.White);
-            foreach (var item in RecordShapeInfo)
+            CalculateInfo();
+            if (findRectF.Count > 0)
             {
-                if (item.gender == "男")
+                
+                if (findRectF[0].gender == "男")
                 {
-                    if (item.status == "KeyPerson")
-                    {
-                        g.FillRectangle(KeyPersonBush, item.x1, item.y1, ShapeWidth, ShapeHeight);
-                    }
-                    g.DrawRectangle(pen, item.x1, item.y1, ShapeWidth, ShapeHeight);
-                    e.Graphics.DrawString(item.age, font, Brushes.Black, item.x1 + ShapeWidth/2 - 7.5f* item.age.Count(), item.y1 + ShapeHeight/2 - 12);
+                    g.FillRectangle(testPersonBush, findRectF[0].x1, findRectF[0].y1, ShapeWidth, ShapeHeight);
+                    g.DrawRectangle(pen, findRectF[0].x1, findRectF[0].y1, ShapeWidth, ShapeHeight);
                 }
-                else if (item.gender == "女")
+                else if (findRectF[0].gender == "女")
                 {
-                    if (item.status == "KeyPerson")
-                    {
-                        g.FillEllipse(KeyPersonBush, item.x1, item.y1, ShapeWidth, ShapeHeight);
-                    }
-                    g.DrawEllipse(pen, item.x1, item.y1, ShapeWidth, ShapeHeight);
-                    e.Graphics.DrawString(item.age, font, Brushes.Black, item.x1 + ShapeWidth / 2 - 7.5f * item.age.Count(), item.y1 + ShapeHeight / 2 - 12);
-                }
-                else if (item.status == "bottom")
-                {
-                    ConnectShape(item.pen, "bottom", item.x1, item.y1, item.x2, item.y2);
-                }
-                else if (item.status == "top")
-                {
-                    ConnectShape(item.pen, "top", item.x1, item.y1, item.x2, item.y2);
-                }
-                else if (item.status == "backslash")
-                {
-                    slashLine = getSlashXY(slashLine, "backslash", item.x1, item.y1, item.x2, item.y2);
-                }
-                else if (item.status == "slash")
-                {
-                    slashLine = getSlashXY(slashLine, "slash", item.x1, item.y1, item.x2, item.y2);
-                }
-                else if (item.status == "vertical")
-                {
-                    slashLine = getSlashXY(slashLine, "vertical", item.x1, item.y1, item.x2, item.y2);
+                    g.FillEllipse(testPersonBush, findRectF[0].x1, findRectF[0].y1, ShapeWidth, ShapeHeight);
+                    g.DrawEllipse(pen, findRectF[0].x1, findRectF[0].y1, ShapeWidth, ShapeHeight);
                 }
                 
             }
-
+            
+            
         }
 
         private void DrawPanel_MouseDown(object sender, MouseEventArgs e)
@@ -230,111 +186,41 @@ namespace Genogram
             originalPoint.X = e.X;
             originalPoint.Y = e.Y;
 
-            findShapeInfo = RecordShapeInfo.Where(item => item.x1-5 < e.X && e.X < item.x2+5 &&
-                                                          item.y1-5 < e.Y && e.Y < item.y2+5).ToList();
+            //findRectF = RecordAllRectF.Where(item => item.X < e.X && e.X < item.X + 50 && item.Y < e.Y && e.Y < item.Y + 50).ToList();
+            //changeRectF_index = RecordAllRectF.IndexOf(findRectF[0]);
+            //if (findRectF.Count > 0)
+            //{
+            //    changeRectF[0] = findRectF[0];
+            //    RecordAllRectF.Remove(findRectF[0]);
+            //    RecordAllRectF.Add(changeRectF[0]);
 
-            if (findShapeInfo.Count > 0)
+            //    originalPoint = new MovePoint { X = e.X, Y = e.Y };
+
+            //    this.Invalidate(true);
+            //}
+
+            findRectF = RecordShapeInfo.Where(item => item.x1 < e.X && e.X < item.x1 + ShapeWidth &&
+                                                      item.y1 < e.Y && e.Y < item.y1 + ShapeHeight).ToList();
+
+            if (findRectF.Count > 0)
             {
-                age_textBox.Text = findShapeInfo[0].age != "" ? findShapeInfo[0].age : "";
+                // 紀錄舊資訊
+                shapeInfo.index = findRectF[0].index;
+                shapeInfo.age = findRectF[0].age;
+                shapeInfo.disease = findRectF[0].disease; // 疾病
+                shapeInfo.status = findRectF[0].status; // 身分地位
+                shapeInfo.gender = findRectF[0].gender; //性別
+                //shapeInfo.gender = "男女";
+                shapeInfo.x1 = findRectF[0].x1; shapeInfo.y1 = findRectF[0].y1;
+                RecordShapeInfo.Remove(findRectF[0]);
+                
+                findRectF.Add(shapeInfo);
 
-                switch (findShapeInfo[0].status)
-                {
-                    case "KeyPerson":
-                    case "Parent":
-                    case "Paternal GrandParent":
-                    case "Maternal GrandParent":
-                    case "":
-                        age_textBox.Focus();
-                        break;
-                    case "top":
-                    case "bottom":
-                        status_comboBox.Items.Clear();
-                        status_comboBox.Focus();
-                        status_comboBox.Text = findShapeInfo[0].status;
-                        status_comboBox.Items.Add("top");
-                        status_comboBox.Items.Add("bottom");
-                        break;
-                    case "slash":
-                    case "backslash":                    
-                    case "vertical":
-                        status_comboBox.Items.Clear();
-                        status_comboBox.Focus();
-                        status_comboBox.Text = findShapeInfo[0].status;
-                        status_comboBox.Items.Add("slash");
-                        status_comboBox.Items.Add("backslash");
-                        status_comboBox.Items.Add("vertical");
-                        break;
-                }
-
-               
-                //age_textBox.Text = "";
-
-
-                //    // 紀錄舊資訊
-                //    shapeInfo.index = findShapeInfo[0].index;
-                //    shapeInfo.age = findShapeInfo[0].age;
-                //    shapeInfo.disease = findShapeInfo[0].disease; // 疾病
-                //    shapeInfo.status = findShapeInfo[0].status; // 身分地位
-                //    shapeInfo.gender = findShapeInfo[0].gender; //性別
-                //    //shapeInfo.gender = "男女";
-                //    shapeInfo.x1 = findShapeInfo[0].x1; shapeInfo.y1 = findShapeInfo[0].y1;
-                //    findShapeInfo.Remove(findShapeInfo[0]);
-                //    findShapeInfo.Add(shapeInfo);
-
-
-
-                //    originalPoint = new MovePoint { X = e.X, Y = e.Y };
-                //    this.Invalidate(true);
-            }
-            
-
-        }
-
-        private void age_textBox_TextChanged(object sender, EventArgs e)
-        {
-            findShapeInfo = RecordShapeInfo.Where(item => item.x1 < originalPoint.X && originalPoint.X < item.x1 + ShapeWidth &&
-                                                          item.y1 < originalPoint.Y && originalPoint.Y < item.y1 + ShapeHeight).ToList();
-            if (findShapeInfo.Count > 0)
-            {
-                foreach (var item in findShapeInfo)
-                {
-                    RecordShapeInfo.Remove(item);
-                }
-
-                // 暫存 ShapeInfo
-                ShapeInfo tmpshapeInfo;
-                tmpshapeInfo = findShapeInfo[0];
-                //int index = RecordShapeInfo.IndexOf(tmpshapeInfo);
-                // 移除找到的 ShapeInfo
-                //RecordShapeInfo.Remove(tmpshapeInfo);
-                tmpshapeInfo.age = age_textBox.Text;
-                // 新增更新的 ShapeInfo
-                RecordShapeInfo.Add(tmpshapeInfo);
+                originalPoint = new MovePoint { X = e.X, Y = e.Y };
 
                 this.Invalidate(true);
             }
-        }
 
-        private void status_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            findShapeInfo = RecordShapeInfo.Where(item => item.x1 < originalPoint.X && originalPoint.X < item.x1 + ShapeWidth &&
-                                                          item.y1 < originalPoint.Y && originalPoint.Y < item.y1 + ShapeHeight).ToList();
-            if (findShapeInfo.Count > 0)
-            {
-                foreach (var item in findShapeInfo)
-                {
-                    RecordShapeInfo.Remove(item);
-                }
-
-                // 暫存 ShapeInfo
-                ShapeInfo tmpshapeInfo;
-                tmpshapeInfo = findShapeInfo[0];
-                tmpshapeInfo.status = status_comboBox.Text;
-                // 新增更新的 ShapeInfo
-                RecordShapeInfo.Add(tmpshapeInfo);
-
-                this.Invalidate(true);
-            }
         }
 
         private void DrawPanel_MouseUp(object sender, MouseEventArgs e)
@@ -370,33 +256,53 @@ namespace Genogram
                     //DrawPanel.Refresh();
 
                 }
-               
-                //findShapeInfo = RecordShapeInfo.Where(item => item.x1 < e.X && e.X < item.x1 + ShapeWidth &&
-                //                                          item.y1 < e.Y && e.Y < item.y1 + ShapeHeight).ToList();
-                //if (findShapeInfo.Count > 0)
+                //List<RectangleF> findRectF = RecordAllRectF.Where(item => item.X < e.X && e.X < item.X + 50 && item.Y < e.Y && e.Y < item.Y + 50).ToList();
+                findRectF = RecordShapeInfo.Where(item => item.x1 < e.X && e.X < item.x1 + ShapeWidth &&
+                                                          item.y1 < e.Y && e.Y < item.y1 + ShapeHeight).ToList();
+                //if (findRectF.Count > 0)
                 //{
-                //    //changeRectF[0] = findShapeInfo[0].rectF;
-                //    float x = findShapeInfo[0].x1;
-                //    float y = findShapeInfo[0].y1;
-                //    // 紀錄舊資訊
-                //    shapeInfo.index = findShapeInfo[0].index;
-                //    shapeInfo.age = findShapeInfo[0].age;
-                //    shapeInfo.disease = findShapeInfo[0].disease; // 疾病
-                //    shapeInfo.status = findShapeInfo[0].status; // 身分地位
-                //    shapeInfo.gender = findShapeInfo[0].gender; //性別
-                //    // 移除list中舊資料
-                //    RecordShapeInfo.Remove(findShapeInfo[0]);
+                //    changeRectF[0] = findRectF[0];
+                //    RecordAllRectF.Remove(findRectF[0]);
 
-                //    x += e.X - originalPoint.X;
-                //    y += e.Y - originalPoint.Y;
-                //    // 更新新矩形位置
-                //    shapeInfo.x1 = x; shapeInfo.y1 = y;
-                //    RecordShapeInfo.Add(shapeInfo);
+                //    changeRectF[0].X += e.X - originalPoint.X;
+                //    changeRectF[0].Y += e.Y - originalPoint.Y;
+                //    RecordAllRectF.Add(changeRectF[0]);
 
                 //    originalPoint = new MovePoint { X = e.X, Y = e.Y };
 
                 //    this.Invalidate(true);
+                //    //DrawPanel.Refresh();
+
                 //}
+
+                if (findRectF.Count > 0)
+                {
+                    //changeRectF[0] = findRectF[0].rectF;
+                    float x = findRectF[0].x1;
+                    float y = findRectF[0].y1;
+                    // 紀錄舊資訊
+                    shapeInfo.index = findRectF[0].index;
+                    shapeInfo.age = findRectF[0].age;
+                    shapeInfo.disease = findRectF[0].disease; // 疾病
+                    shapeInfo.status = findRectF[0].status; // 身分地位
+                    shapeInfo.gender = findRectF[0].gender; //性別
+                    // 移除list中舊資料
+                    RecordShapeInfo.Remove(findRectF[0]);
+
+                    x += e.X - originalPoint.X;
+                    y += e.Y - originalPoint.Y;
+                    // 更新新矩形位置
+                    shapeInfo.x1 = x; shapeInfo.y1 = y;
+
+                    findRectF.Add(shapeInfo);
+
+                    originalPoint = new MovePoint { X = e.X, Y = e.Y };
+
+                    this.Invalidate(true);
+                    //DrawPanel.Refresh();
+
+                }
+
             }
         }
 
@@ -508,9 +414,6 @@ namespace Genogram
         {
             if (Clear_radioButton.Checked) DrawType = "Clear";
         }
-
-
-
         // 畫布功能 [End]
 
         private void execute_button_Click(object sender, EventArgs e)
@@ -521,14 +424,11 @@ namespace Genogram
             //g.DrawEllipse(pen, 3000, 500, 100, 100);
         }
 
-        
-
-        private List<float> DrawParent(float x1, float y, float ShapeDistanceRatio, string MarriageType, int index, string status)
+        private List<float> DrawParent(float x1, float y, float ShapeDistanceRatio, string MarriageType)
         {
             // x : 孩子圖形中心點x座標, y : 孩子圖形左上y座標, ShapeDistanceRatio : 男女距離，決定連接長度
             float m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2;
             float m_fatherXpos, m_fatherYpos, m_motherXpos, m_motherYpos;
-            
             List<float> position = new List<float> { };
             // 父母(男)
             m_parentLineX1 = x1 - DrawPanelWidth* ShapeDistanceRatio / 2;
@@ -539,116 +439,74 @@ namespace Genogram
             m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
             m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight;
 
-            // 長輩婚姻連線
+            //ConnectShape(pen, "bottom", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
             ConnectMarriageLine(MarriageType, m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
 
-            // 連接長輩垂直線
-            lineX1 = lineX2 = (m_parentLineX1 + m_parentLineX2) / 2;
-            lineY1 = m_parentLineY2;
-            lineY2 = m_parentLineY2 + lineDropY;
-            UpdateShapeInfo(0, "vertical", pen, lineX1, lineY1, lineX2, lineY2);
-            slashLine = getSlashXY(slashLine, "vertical", lineX1, lineY1, lineX2, lineY2);
+            // 連接子女垂直線
+            slashLine = getSlashXY(slashLine, "vertical", m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
             g.DrawRectangle(pen, m_fatherXpos, m_fatherYpos, ShapeWidth, ShapeHeight);
             g.DrawEllipse(pen, m_motherXpos, m_motherYpos, ShapeWidth, ShapeHeight);
-            UpdateShapeInfo(index, "", "unKnown", status, "男", m_fatherXpos, m_fatherYpos, m_fatherXpos + ShapeWidth, m_fatherYpos + ShapeHeight);
-            UpdateShapeInfo(index, "", "unKnown", status, "女", m_motherXpos, m_motherYpos, m_motherXpos + ShapeWidth, m_motherYpos + ShapeHeight);
-
             position.Add(m_fatherXpos); position.Add(m_motherXpos); position.Add(m_fatherYpos);
             return position;
         }
 
         private void ConnectMarriageLine(string type, float x1, float y1, float x2, float y2)
         {
-            switch (type)
+            if (type == "結")
             {
-                case "結":
-                    UpdateShapeInfo(0, "bottom", pen, x1, y1, x2, y2);
-                    ConnectShape(pen, "bottom", x1, y1, x2, y2);
-                    break;
-                case "同":
-                    UpdateShapeInfo(0, "bottom", DashStylePen, x1, y1, x2, y2);
-                    ConnectShape(DashStylePen, "bottom", x1, y1, x2, y2);
-                    break;
-                case "分":
-                    UpdateShapeInfo(0, "bottom", pen, x1, y1, x2, y2);
-                    ConnectShape(pen, "bottom", x1, y1, x2, y2);
-
-                    lineX1 = (x1 + x2) / 2 - slashWidth;
-                    lineX2 = (x1 + x2) / 2 + slashWidth;
-                    lineY1 = y2 - slashHeight;
-                    lineY2 = y2 + slashHeight;
-                    UpdateShapeInfo(0, "backslash", pen, lineX1, lineY1, lineX2, lineY2);
-                    slashLine = getSlashXY(slashLine, "backslash", lineX1, lineY1, lineX2, lineY2);
-                    break;
-                case "離":
-                    UpdateShapeInfo(0, "bottom", pen, x1, y1, x2, y2);
-                    ConnectShape(pen, "bottom", x1, y1, x2, y2);
-
-                    lineX1 = (x1 + x2) / 2 - slashWidth;
-                    lineX2 = (x1 + x2) / 2 + slashWidth;
-                    lineY1 = y2 - slashHeight;
-                    lineY2 = y2 + slashHeight;
-                    UpdateShapeInfo(0, "backslash", pen, lineX1, lineY1, lineX2, lineY2);
-                    slashLine = getSlashXY(slashLine, "backslash", lineX1, lineY1, lineX2, lineY2);
-
-                    lineX1 = (x1 + x2) / 2 - slashWidth;
-                    lineX2 = (x1 + x2) / 2 + slashWidth;
-                    lineY1 = y2 + slashHeight;
-                    lineY2 = y2 - slashHeight;
-                    UpdateShapeInfo(0, "slash", pen, lineX1, lineY1, lineX2, lineY2);
-                    slashLine = getSlashXY(slashLine, "slash", lineX1, lineY1, lineX2, lineY2);
-                    break;
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
             }
-         
+            // 同居
+            else if (type == "同")
+            {
+                ConnectShape(DashStylePen, "bottom", x1, y1, x2, y2);
+            }
+            // 分居
+            else if (type == "分")
+            {
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "backslash", x1, y1, x2, y2);
+            }
+            // 離婚
+            else if (type == "離")
+            {
+                ConnectShape(pen, "bottom", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "backslash", x1, y1, x2, y2);
+                slashLine = getSlashXY(slashLine, "slash", x1, y1, x2, y2);
+
+            }
         }
 
         private string CheckMarriage(bool married, bool cohabit, bool separate, bool divorce)
         {
-            string type = married ? "結" : cohabit ? "同" : separate ? "分" : divorce ? "離" : "未";
+            string type;
+            if (married)
+            {
+                type = "結";
+            }
+            // 同居
+            else if (cohabit)
+            {
+                type = "同";
+            }
+            // 分居
+            else if (separate)
+            {
+                type = "分";
+            }
+            // 離婚
+            else if (divorce)
+            {
+                type = "離";
+            }
+            else
+            {
+                type = "未";
+            }
+
             return type;
         }
 
-        private void UpdateShapeInfo(int index, string age, string disease, string status, string gender, float x1, float y1, float x2, float y2)
-        {
-            shapeInfo.index = index;
-            shapeInfo.age = age;
-            shapeInfo.disease = disease;
-            shapeInfo.status = status;
-            shapeInfo.gender = gender;
-            shapeInfo.x1 = x1; shapeInfo.y1 = y1;
-            shapeInfo.x2 = x2; shapeInfo.y2 = y2;
-            // 加進紀錄
-            RecordShapeInfo.Add(shapeInfo);
-            // 清空
-            shapeInfo.index = -1;
-            shapeInfo.age = "";
-            shapeInfo.disease = "";
-            shapeInfo.status = "";
-            shapeInfo.gender = "";
-            shapeInfo.x1 = 0; shapeInfo.y1 = 0;
-            shapeInfo.x2 = 0; shapeInfo.y2 = 0;
-        }
-        private void UpdateShapeInfo(int index, string status, Pen pen ,float x1, float y1, float x2, float y2)
-        {
-            shapeInfo.index = index;
-            shapeInfo.age = "";
-            shapeInfo.disease = "";
-            shapeInfo.status = status;
-            shapeInfo.gender = "";
-            shapeInfo.pen = pen;
-            shapeInfo.x1 = x1; shapeInfo.y1 = y1;
-            shapeInfo.x2 = x2; shapeInfo.y2 = y2;
-            // 加進紀錄
-            RecordShapeInfo.Add(shapeInfo);
-            // 清空
-            shapeInfo.index = -1;
-            shapeInfo.age = "";
-            shapeInfo.disease = "";
-            shapeInfo.status = "";
-            shapeInfo.gender = "";
-            shapeInfo.x1 = 0; shapeInfo.y1 = 0;
-            shapeInfo.x2 = 0; shapeInfo.y2 = 0;
-        }
         // ===== 圖像計算
         private void CalculateInfo()
         {
@@ -689,14 +547,35 @@ namespace Genogram
             if (man_radioButton.Checked)
             {
                 selfInfo.member += 1;
+                //tmpRectF[0] = new RectangleF(selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
+                // 紀錄矩形
+                RecordAllRectF.Add(tmpRectF[0]);
                 // 紀錄矩形資料
-                UpdateShapeInfo(0, "", "unKnown", "KeyPerson", "男", selfManXpos, selfManYpos, selfManXpos+ ShapeWidth, selfManYpos+ ShapeHeight);
+                shapeInfo.index = 0;
+                shapeInfo.gender = "男";
+                //shapeInfo.rectF = tmpRectF[0];
+                shapeInfo.x1 = selfManXpos; shapeInfo.y1 = selfManYpos;
+                shapeInfo.w = ShapeWidth; shapeInfo.h = ShapeHeight;
+                RecordShapeInfo.Add(shapeInfo);
+
+                shapeInfo = new ShapeInfo();
+
                 g.FillRectangle(KeyPersonBush, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
                 g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
 
                 if (!self_unmarried_radioButton.Checked)
                 {
-                    UpdateShapeInfo(0, "", "unKnown", "spouse", "女", selfWomanXpos, selfWomanYpos, selfWomanXpos + ShapeWidth, selfWomanYpos + ShapeHeight);
+                    //tmpRectF[0] = new RectangleF(selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
+                    //RecordAllRectF.Add(tmpRectF[0]);
+                    // 紀錄矩形資料
+                    shapeInfo.index = 1;
+                    shapeInfo.gender = "女";
+                    //shapeInfo.rectF = tmpRectF[0];
+                    shapeInfo.x1 = selfWomanXpos; shapeInfo.y1 = selfWomanYpos;
+                    shapeInfo.w = ShapeWidth; shapeInfo.h = ShapeHeight;
+                    RecordShapeInfo.Add(shapeInfo);
+                    shapeInfo = new ShapeInfo();
+
                     g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);                    
                 }
 
@@ -705,13 +584,10 @@ namespace Genogram
             if (woman_radioButton.Checked)
             {
                 selfInfo.member += 1;
-                UpdateShapeInfo(0, "", "unKnown", "KeyPerson", "女", selfWomanXpos, selfWomanYpos, selfWomanXpos + ShapeWidth, selfWomanYpos + ShapeHeight);
                 g.FillEllipse(KeyPersonBush, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
                 g.DrawEllipse(pen, selfWomanXpos, selfWomanYpos, ShapeWidth, ShapeHeight);
-
                 if (!self_unmarried_radioButton.Checked)
                 {
-                    UpdateShapeInfo(0, "", "unKnown", "spouse", "男", selfManXpos, selfManYpos, selfManXpos + ShapeWidth, selfManYpos + ShapeHeight);
                     g.DrawRectangle(pen, selfManXpos, selfManYpos, ShapeWidth, ShapeHeight);
                 }
             }
@@ -727,23 +603,23 @@ namespace Genogram
 
             if (self_relation_parent_radioButton.Checked)
             {               
-                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 男方爸媽
-                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 女方爸媽
+                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 男方爸媽
+                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 女方爸媽
             }
             else if (man_radioButton.Checked)
             {                
                 parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
-                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2, parentInfo.marriage, 3, "Parent"); //爸媽
-                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 爺爺 阿嬤
-                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 外公 外婆
+                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2, parentInfo.marriage); //爸媽
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 爺爺 阿嬤
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 外公 外婆
             }
             else if (woman_radioButton.Checked)
             {
 
                 parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
-                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2, parentInfo.marriage, 3, "Parent"); //爸媽
-                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 爺爺 阿嬤
-                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 外公 外婆
+                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2, parentInfo.marriage); //爸媽
+                DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage); // 爺爺 阿嬤
+                DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage); // 外公 外婆
             }
 
 
@@ -761,22 +637,11 @@ namespace Genogram
                 childInfo.marriage.Add("未");
             }
 
-            // 檢查子女結婚人數
-            if (childInfo.marriage.Count > childInfo.member.Count)
-            {
-                MessageBox.Show("子女結婚人數不正確");
-                return;
-            }
-
             // 子女數量>0才需畫圖
             if (childInfo.totalNumber > 0)
             {
                 // 連接子女垂直線
-                lineX1 = lineX2 = (selfPersonLineX1 + selfPersonLineX2) / 2;
-                lineY1 = selfPersonLineY2;
-                lineY2 = selfPersonLineY2 + lineDropY;
-                UpdateShapeInfo(0, "vertical", pen, lineX1, lineY1, lineX2, lineY2);
-                slashLine = getSlashXY(slashLine, "vertical", lineX1, lineY1, lineX2, lineY2);
+                slashLine = getSlashXY(slashLine, "vertical", selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
 
                 // 設定起始位置。 奇數子女數量
                 int childAddMarriageNum = childInfo.totalNumber + childInfo.childmarriageNum;
@@ -823,21 +688,17 @@ namespace Genogram
                 childInfo.Ypos = childInfo.member.Count() == 1 ? childLineY1 : childLineY2;
                 childInfo.Ypos_marriage = childInfo.Ypos + ShapeWidth;
                 int index = 0;
-                int startRectIdx = 4;
                 foreach (string item in childInfo.member)
                 {
                     
                     Xpos = Ratio_x * DrawPanelWidth;
                     if (item == "男")
                     {
-                        // index+startRectIdx : 前面有三個矩形已生成
-                        UpdateShapeInfo(index + startRectIdx, "", "unKnown", "Child", "男", Xpos, childInfo.Ypos, Xpos + ShapeWidth, childInfo.Ypos + ShapeHeight);
                         g.DrawRectangle(pen, Xpos, childInfo.Ypos, ShapeWidth, ShapeHeight);
 
                     }
                     else if (item == "女")
                     {
-                        UpdateShapeInfo(index + startRectIdx, "", "unKnown", "Child", "女", Xpos, childInfo.Ypos, Xpos + ShapeWidth, childInfo.Ypos + ShapeHeight);
                         g.DrawEllipse(pen, Xpos, childInfo.Ypos, ShapeWidth, ShapeHeight);
 
                     }
@@ -856,12 +717,10 @@ namespace Genogram
                         Xpos = Ratio_x * DrawPanelWidth;
                         if (item == "男")
                         {
-                            UpdateShapeInfo(index + startRectIdx, "", "unKnown", "Child", "女", Xpos, childInfo.Ypos, Xpos + ShapeWidth, childInfo.Ypos + ShapeHeight);
                             g.DrawEllipse(pen, Xpos, childInfo.Ypos, ShapeWidth, ShapeHeight);
                         }
                         else if (item == "女")
                         {
-                            UpdateShapeInfo(index + startRectIdx, "", "unKnown", "Child", "男", Xpos, childInfo.Ypos, Xpos + ShapeWidth, childInfo.Ypos + ShapeHeight);
                             g.DrawRectangle(pen, Xpos, childInfo.Ypos, ShapeWidth, ShapeHeight);                           
                         }
                         // 紀錄伴侶的圖形的初始位置
@@ -875,7 +734,6 @@ namespace Genogram
                 for (int idx = 0; idx < childInfo.Xpos.Count() - 1; idx++)
                 {
                     //前後兩兩連線
-                    UpdateShapeInfo(0, "top", pen, childInfo.Xpos[idx], childLineY1, childInfo.Xpos[idx + 1], childInfo.Ypos);
                     ConnectShape(pen, "top", childInfo.Xpos[idx], childLineY1, childInfo.Xpos[idx + 1], childInfo.Ypos);
                 }
 
@@ -908,36 +766,30 @@ namespace Genogram
 
         private SlashLine getSlashXY(SlashLine LineInfo, string type, float x1, float y1, float x2, float y2)
         {
-            //if (type == "slash")
-            //{
-            //    // 斜線
-            //    LineInfo.x1 = (x1 + x2) / 2 - slashWidth;
-            //    LineInfo.y1 = y2 + slashHeight;
-            //    LineInfo.x2 = (x1 + x2) / 2 + slashWidth;
-            //    LineInfo.y2 = y2 - slashHeight;           
-            //}
-            //else if (type == "backslash")
-            //{
-            //    // 反斜線
-            //    LineInfo.x1 = (x1 + x2) / 2 - slashWidth;
-            //    LineInfo.y1 = y2 - slashHeight;
-            //    LineInfo.x2 = (x1 + x2) / 2 + slashWidth;
-            //    LineInfo.y2 = y2 + slashHeight;
-            //}
-            //else if (type == "vertical")
-            //{
-            //    // 垂直線
-            //    LineInfo.x1 = (x1 + x2) / 2;
-            //    LineInfo.y1 = y2;
-            //    LineInfo.x2 = (x1 + x2) / 2;
-            //    LineInfo.y2 = y2 + lineDropY;
-            //}
-
-            LineInfo.x1 = x1;
-            LineInfo.y1 = y1;
-            LineInfo.x2 = x2;
-            LineInfo.y2 = y2;
-
+            if (type == "slash")
+            {
+                // 斜線
+                LineInfo.x1 = (x1 + x2) / 2 - slashWidth;
+                LineInfo.y1 = y2 + slashHeight;
+                LineInfo.x2 = (x1 + x2) / 2 + slashWidth;
+                LineInfo.y2 = y2 - slashHeight;           
+            }
+            else if (type == "backslash")
+            {
+                // 反斜線
+                LineInfo.x1 = (x1 + x2) / 2 - slashWidth;
+                LineInfo.y1 = y2 - slashHeight;
+                LineInfo.x2 = (x1 + x2) / 2 + slashWidth;
+                LineInfo.y2 = y2 + slashHeight;
+            }
+            else if (type == "vertical")
+            {
+                // 垂直線
+                LineInfo.x1 = (x1 + x2) / 2;
+                LineInfo.y1 = y2;
+                LineInfo.x2 = (x1 + x2) / 2;
+                LineInfo.y2 = y2 + lineDropY;
+            }
             g.DrawLine(pen, LineInfo.x1, LineInfo.y1, LineInfo.x2, LineInfo.y2);
 
             return LineInfo;
@@ -1013,12 +865,12 @@ namespace Genogram
         struct ShapeInfo
         {
             public int index;
-            public string age;
+            public int age;
             public string disease; // 疾病
-            public string status; // 身分地位;線條
+            public string status; // 身分地位
             public string gender; //性別
+            public RectangleF rectF; // 矩形左上與長寬
             public float x1, y1, x2, y2, w, h;
-            public Pen pen;
         }
 
     }
