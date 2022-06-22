@@ -85,6 +85,19 @@
             this.label12 = new System.Windows.Forms.Label();
             this.age_textBox = new System.Windows.Forms.TextBox();
             this.status_comboBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.attribute_comboBox = new System.Windows.Forms.ComboBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.add_illustrate_button = new System.Windows.Forms.Button();
+            this.illustrate_textBox = new System.Windows.Forms.TextBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.illustrate_width_textBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.illustrate_height_textBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.setpoint_button = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -95,14 +108,16 @@
             this.paternal_marriage_panel.SuspendLayout();
             this.maternal_marriage_panel.SuspendLayout();
             this.panel11.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // DrawPanel
             // 
             this.DrawPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.DrawPanel.Location = new System.Drawing.Point(29, 222);
+            this.DrawPanel.Location = new System.Drawing.Point(29, 30);
             this.DrawPanel.Name = "DrawPanel";
-            this.DrawPanel.Size = new System.Drawing.Size(952, 551);
+            this.DrawPanel.Size = new System.Drawing.Size(902, 593);
             this.DrawPanel.TabIndex = 0;
             this.DrawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.DrawPanel_Paint);
             this.DrawPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawPanel_MouseDown);
@@ -114,9 +129,9 @@
             this.panel1.Controls.Add(this.Draw_radioButton);
             this.panel1.Controls.Add(this.Clear_radioButton);
             this.panel1.Controls.Add(this.Drag_radioButton);
-            this.panel1.Location = new System.Drawing.Point(29, 29);
+            this.panel1.Location = new System.Drawing.Point(1308, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(110, 109);
+            this.panel1.Size = new System.Drawing.Size(82, 109);
             this.panel1.TabIndex = 1;
             // 
             // Draw_radioButton
@@ -158,7 +173,7 @@
             // 
             // execute_button
             // 
-            this.execute_button.Location = new System.Drawing.Point(889, 179);
+            this.execute_button.Location = new System.Drawing.Point(1290, 595);
             this.execute_button.Name = "execute_button";
             this.execute_button.Size = new System.Drawing.Size(75, 23);
             this.execute_button.TabIndex = 4;
@@ -183,7 +198,7 @@
             this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.label1);
-            this.panel2.Location = new System.Drawing.Point(165, 32);
+            this.panel2.Location = new System.Drawing.Point(961, 30);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(330, 90);
             this.panel2.TabIndex = 6;
@@ -345,7 +360,7 @@
             this.panel3.Controls.Add(this.paternal_marriage_label);
             this.panel3.Controls.Add(this.paternal_marriage_panel);
             this.panel3.Controls.Add(this.maternal_marriage_panel);
-            this.panel3.Location = new System.Drawing.Point(513, 29);
+            this.panel3.Location = new System.Drawing.Point(961, 135);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(338, 97);
             this.panel3.TabIndex = 9;
@@ -555,14 +570,14 @@
             this.panel11.Controls.Add(this.label10);
             this.panel11.Controls.Add(this.addChild_married_button);
             this.panel11.Controls.Add(this.label11);
-            this.panel11.Location = new System.Drawing.Point(165, 128);
+            this.panel11.Location = new System.Drawing.Point(961, 252);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(444, 74);
+            this.panel11.Size = new System.Drawing.Size(419, 74);
             this.panel11.TabIndex = 17;
             // 
             // addChild_unmarried_button
             // 
-            this.addChild_unmarried_button.Location = new System.Drawing.Point(203, 39);
+            this.addChild_unmarried_button.Location = new System.Drawing.Point(191, 39);
             this.addChild_unmarried_button.Name = "addChild_unmarried_button";
             this.addChild_unmarried_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_unmarried_button.TabIndex = 26;
@@ -572,7 +587,7 @@
             // 
             // addChild_divorce_button
             // 
-            this.addChild_divorce_button.Location = new System.Drawing.Point(383, 39);
+            this.addChild_divorce_button.Location = new System.Drawing.Point(371, 39);
             this.addChild_divorce_button.Name = "addChild_divorce_button";
             this.addChild_divorce_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_divorce_button.TabIndex = 25;
@@ -584,12 +599,12 @@
             // 
             this.child_textBox.Location = new System.Drawing.Point(49, 8);
             this.child_textBox.Name = "child_textBox";
-            this.child_textBox.Size = new System.Drawing.Size(148, 22);
+            this.child_textBox.Size = new System.Drawing.Size(129, 22);
             this.child_textBox.TabIndex = 20;
             // 
             // addChild_separate_button
             // 
-            this.addChild_separate_button.Location = new System.Drawing.Point(338, 39);
+            this.addChild_separate_button.Location = new System.Drawing.Point(326, 39);
             this.addChild_separate_button.Name = "addChild_separate_button";
             this.addChild_separate_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_separate_button.TabIndex = 24;
@@ -599,7 +614,7 @@
             // 
             // addChild_Girl_button
             // 
-            this.addChild_Girl_button.Location = new System.Drawing.Point(248, 8);
+            this.addChild_Girl_button.Location = new System.Drawing.Point(236, 8);
             this.addChild_Girl_button.Name = "addChild_Girl_button";
             this.addChild_Girl_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_Girl_button.TabIndex = 19;
@@ -611,12 +626,12 @@
             // 
             this.child_marriage_textBox.Location = new System.Drawing.Point(48, 39);
             this.child_marriage_textBox.Name = "child_marriage_textBox";
-            this.child_marriage_textBox.Size = new System.Drawing.Size(148, 22);
+            this.child_marriage_textBox.Size = new System.Drawing.Size(129, 22);
             this.child_marriage_textBox.TabIndex = 23;
             // 
             // addChild_cohabit_button
             // 
-            this.addChild_cohabit_button.Location = new System.Drawing.Point(293, 39);
+            this.addChild_cohabit_button.Location = new System.Drawing.Point(281, 39);
             this.addChild_cohabit_button.Name = "addChild_cohabit_button";
             this.addChild_cohabit_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_cohabit_button.TabIndex = 22;
@@ -626,7 +641,7 @@
             // 
             // addChild_Boy_button
             // 
-            this.addChild_Boy_button.Location = new System.Drawing.Point(203, 8);
+            this.addChild_Boy_button.Location = new System.Drawing.Point(191, 8);
             this.addChild_Boy_button.Name = "addChild_Boy_button";
             this.addChild_Boy_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_Boy_button.TabIndex = 18;
@@ -645,7 +660,7 @@
             // 
             // addChild_married_button
             // 
-            this.addChild_married_button.Location = new System.Drawing.Point(248, 39);
+            this.addChild_married_button.Location = new System.Drawing.Point(236, 39);
             this.addChild_married_button.Name = "addChild_married_button";
             this.addChild_married_button.Size = new System.Drawing.Size(37, 23);
             this.addChild_married_button.TabIndex = 21;
@@ -664,7 +679,7 @@
             // 
             // ShapeSize_textBox
             // 
-            this.ShapeSize_textBox.Location = new System.Drawing.Point(69, 167);
+            this.ShapeSize_textBox.Location = new System.Drawing.Point(999, 599);
             this.ShapeSize_textBox.Name = "ShapeSize_textBox";
             this.ShapeSize_textBox.Size = new System.Drawing.Size(70, 22);
             this.ShapeSize_textBox.TabIndex = 22;
@@ -673,7 +688,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(27, 173);
+            this.label12.Location = new System.Drawing.Point(957, 605);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(35, 12);
             this.label12.TabIndex = 21;
@@ -681,29 +696,155 @@
             // 
             // age_textBox
             // 
-            this.age_textBox.Location = new System.Drawing.Point(881, 36);
+            this.age_textBox.Location = new System.Drawing.Point(49, 9);
             this.age_textBox.Name = "age_textBox";
-            this.age_textBox.Size = new System.Drawing.Size(100, 22);
+            this.age_textBox.Size = new System.Drawing.Size(65, 22);
             this.age_textBox.TabIndex = 23;
             this.age_textBox.TextChanged += new System.EventHandler(this.age_textBox_TextChanged);
             // 
             // status_comboBox
             // 
             this.status_comboBox.FormattingEnabled = true;
-            this.status_comboBox.Location = new System.Drawing.Point(881, 75);
+            this.status_comboBox.Location = new System.Drawing.Point(49, 38);
             this.status_comboBox.Name = "status_comboBox";
-            this.status_comboBox.Size = new System.Drawing.Size(100, 20);
+            this.status_comboBox.Size = new System.Drawing.Size(65, 20);
             this.status_comboBox.TabIndex = 24;
             this.status_comboBox.SelectedIndexChanged += new System.EventHandler(this.status_comboBox_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "年齡 :";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 12);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "類型 :";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 72);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 12);
+            this.label5.TabIndex = 28;
+            this.label5.Text = "屬性 :";
+            // 
+            // attribute_comboBox
+            // 
+            this.attribute_comboBox.FormattingEnabled = true;
+            this.attribute_comboBox.Location = new System.Drawing.Point(49, 68);
+            this.attribute_comboBox.Name = "attribute_comboBox";
+            this.attribute_comboBox.Size = new System.Drawing.Size(65, 20);
+            this.attribute_comboBox.TabIndex = 27;
+            this.attribute_comboBox.SelectedIndexChanged += new System.EventHandler(this.attribute_comboBox_SelectedIndexChanged);
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.label4);
+            this.panel4.Controls.Add(this.label5);
+            this.panel4.Controls.Add(this.age_textBox);
+            this.panel4.Controls.Add(this.attribute_comboBox);
+            this.panel4.Controls.Add(this.status_comboBox);
+            this.panel4.Controls.Add(this.label3);
+            this.panel4.Location = new System.Drawing.Point(1102, 343);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(124, 100);
+            this.panel4.TabIndex = 29;
+            // 
+            // add_illustrate_button
+            // 
+            this.add_illustrate_button.Location = new System.Drawing.Point(45, 90);
+            this.add_illustrate_button.Name = "add_illustrate_button";
+            this.add_illustrate_button.Size = new System.Drawing.Size(75, 23);
+            this.add_illustrate_button.TabIndex = 30;
+            this.add_illustrate_button.Text = "新增敘述";
+            this.add_illustrate_button.UseVisualStyleBackColor = true;
+            this.add_illustrate_button.Click += new System.EventHandler(this.add_illustrate_button_Click);
+            // 
+            // illustrate_textBox
+            // 
+            this.illustrate_textBox.Location = new System.Drawing.Point(1245, 353);
+            this.illustrate_textBox.Multiline = true;
+            this.illustrate_textBox.Name = "illustrate_textBox";
+            this.illustrate_textBox.Size = new System.Drawing.Size(135, 88);
+            this.illustrate_textBox.TabIndex = 31;
+            this.illustrate_textBox.TextChanged += new System.EventHandler(this.illustrate_textBox_TextChanged);
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.setpoint_button);
+            this.panel5.Controls.Add(this.illustrate_height_textBox);
+            this.panel5.Controls.Add(this.add_illustrate_button);
+            this.panel5.Controls.Add(this.label6);
+            this.panel5.Controls.Add(this.illustrate_width_textBox);
+            this.panel5.Controls.Add(this.label8);
+            this.panel5.Location = new System.Drawing.Point(1245, 447);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(136, 125);
+            this.panel5.TabIndex = 30;
+            // 
+            // illustrate_width_textBox
+            // 
+            this.illustrate_width_textBox.Location = new System.Drawing.Point(33, 14);
+            this.illustrate_width_textBox.Name = "illustrate_width_textBox";
+            this.illustrate_width_textBox.Size = new System.Drawing.Size(24, 22);
+            this.illustrate_width_textBox.TabIndex = 23;
+            this.illustrate_width_textBox.TextChanged += new System.EventHandler(this.illustrate_width_textBox_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 19);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(23, 12);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "寬 :";
+            // 
+            // illustrate_height_textBox
+            // 
+            this.illustrate_height_textBox.Location = new System.Drawing.Point(96, 14);
+            this.illustrate_height_textBox.Name = "illustrate_height_textBox";
+            this.illustrate_height_textBox.Size = new System.Drawing.Size(24, 22);
+            this.illustrate_height_textBox.TabIndex = 26;
+            this.illustrate_height_textBox.TextChanged += new System.EventHandler(this.illustrate_height_textBox_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(70, 19);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(23, 12);
+            this.label6.TabIndex = 27;
+            this.label6.Text = "高 :";
+            // 
+            // setpoint_button
+            // 
+            this.setpoint_button.Location = new System.Drawing.Point(45, 52);
+            this.setpoint_button.Name = "setpoint_button";
+            this.setpoint_button.Size = new System.Drawing.Size(75, 23);
+            this.setpoint_button.TabIndex = 31;
+            this.setpoint_button.Text = "設定起點";
+            this.setpoint_button.UseVisualStyleBackColor = true;
+            this.setpoint_button.Click += new System.EventHandler(this.setpoint_button_Click);
             // 
             // Genogram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1031, 822);
-            this.Controls.Add(this.status_comboBox);
-            this.Controls.Add(this.age_textBox);
+            this.ClientSize = new System.Drawing.Size(1421, 649);
+            this.Controls.Add(this.panel5);
+            this.Controls.Add(this.illustrate_textBox);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.ShapeSize_textBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.panel11);
@@ -713,7 +854,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.DrawPanel);
             this.Name = "Genogram";
-            this.Text = " ";
+            this.Text = " ";     
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -734,6 +875,10 @@
             this.maternal_marriage_panel.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -798,6 +943,19 @@
         private System.Windows.Forms.RadioButton Draw_radioButton;
         private System.Windows.Forms.TextBox age_textBox;
         private System.Windows.Forms.ComboBox status_comboBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox attribute_comboBox;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Button add_illustrate_button;
+        private System.Windows.Forms.TextBox illustrate_textBox;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.TextBox illustrate_height_textBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox illustrate_width_textBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button setpoint_button;
     }
 }
 
