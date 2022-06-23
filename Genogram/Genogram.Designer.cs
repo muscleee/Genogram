@@ -93,11 +93,13 @@
             this.add_illustrate_button = new System.Windows.Forms.Button();
             this.illustrate_textBox = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.illustrate_width_textBox = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.setpoint_button = new System.Windows.Forms.Button();
             this.illustrate_height_textBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.setpoint_button = new System.Windows.Forms.Button();
+            this.illustrate_width_textBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.delete_illustrate_button = new System.Windows.Forms.Button();
+            this.save_button = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -762,7 +764,7 @@
             // 
             // add_illustrate_button
             // 
-            this.add_illustrate_button.Location = new System.Drawing.Point(45, 90);
+            this.add_illustrate_button.Location = new System.Drawing.Point(45, 80);
             this.add_illustrate_button.Name = "add_illustrate_button";
             this.add_illustrate_button.Size = new System.Drawing.Size(75, 23);
             this.add_illustrate_button.TabIndex = 30;
@@ -772,7 +774,7 @@
             // 
             // illustrate_textBox
             // 
-            this.illustrate_textBox.Location = new System.Drawing.Point(1245, 353);
+            this.illustrate_textBox.Location = new System.Drawing.Point(1245, 350);
             this.illustrate_textBox.Multiline = true;
             this.illustrate_textBox.Name = "illustrate_textBox";
             this.illustrate_textBox.Size = new System.Drawing.Size(135, 88);
@@ -781,6 +783,7 @@
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.delete_illustrate_button);
             this.panel5.Controls.Add(this.setpoint_button);
             this.panel5.Controls.Add(this.illustrate_height_textBox);
             this.panel5.Controls.Add(this.add_illustrate_button);
@@ -789,25 +792,18 @@
             this.panel5.Controls.Add(this.label8);
             this.panel5.Location = new System.Drawing.Point(1245, 447);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(136, 125);
+            this.panel5.Size = new System.Drawing.Size(136, 142);
             this.panel5.TabIndex = 30;
             // 
-            // illustrate_width_textBox
+            // setpoint_button
             // 
-            this.illustrate_width_textBox.Location = new System.Drawing.Point(33, 14);
-            this.illustrate_width_textBox.Name = "illustrate_width_textBox";
-            this.illustrate_width_textBox.Size = new System.Drawing.Size(24, 22);
-            this.illustrate_width_textBox.TabIndex = 23;
-            this.illustrate_width_textBox.TextChanged += new System.EventHandler(this.illustrate_width_textBox_TextChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 19);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(23, 12);
-            this.label8.TabIndex = 25;
-            this.label8.Text = "寬 :";
+            this.setpoint_button.Location = new System.Drawing.Point(45, 47);
+            this.setpoint_button.Name = "setpoint_button";
+            this.setpoint_button.Size = new System.Drawing.Size(75, 23);
+            this.setpoint_button.TabIndex = 31;
+            this.setpoint_button.Text = "設定起點";
+            this.setpoint_button.UseVisualStyleBackColor = true;
+            this.setpoint_button.Click += new System.EventHandler(this.setpoint_button_Click);
             // 
             // illustrate_height_textBox
             // 
@@ -826,15 +822,42 @@
             this.label6.TabIndex = 27;
             this.label6.Text = "高 :";
             // 
-            // setpoint_button
+            // illustrate_width_textBox
             // 
-            this.setpoint_button.Location = new System.Drawing.Point(45, 52);
-            this.setpoint_button.Name = "setpoint_button";
-            this.setpoint_button.Size = new System.Drawing.Size(75, 23);
-            this.setpoint_button.TabIndex = 31;
-            this.setpoint_button.Text = "設定起點";
-            this.setpoint_button.UseVisualStyleBackColor = true;
-            this.setpoint_button.Click += new System.EventHandler(this.setpoint_button_Click);
+            this.illustrate_width_textBox.Location = new System.Drawing.Point(33, 14);
+            this.illustrate_width_textBox.Name = "illustrate_width_textBox";
+            this.illustrate_width_textBox.Size = new System.Drawing.Size(24, 22);
+            this.illustrate_width_textBox.TabIndex = 23;
+            this.illustrate_width_textBox.TextChanged += new System.EventHandler(this.illustrate_width_textBox_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 19);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(23, 12);
+            this.label8.TabIndex = 25;
+            this.label8.Text = "寬 :";
+            // 
+            // delete_illustrate_button
+            // 
+            this.delete_illustrate_button.Location = new System.Drawing.Point(45, 113);
+            this.delete_illustrate_button.Name = "delete_illustrate_button";
+            this.delete_illustrate_button.Size = new System.Drawing.Size(75, 23);
+            this.delete_illustrate_button.TabIndex = 32;
+            this.delete_illustrate_button.Text = "刪除敘述";
+            this.delete_illustrate_button.UseVisualStyleBackColor = true;
+            this.delete_illustrate_button.Click += new System.EventHandler(this.delete_illustrate_button_Click);
+            // 
+            // save_button
+            // 
+            this.save_button.Location = new System.Drawing.Point(1197, 595);
+            this.save_button.Name = "save_button";
+            this.save_button.Size = new System.Drawing.Size(75, 23);
+            this.save_button.TabIndex = 33;
+            this.save_button.Text = "存檔";
+            this.save_button.UseVisualStyleBackColor = true;
+            this.save_button.Click += new System.EventHandler(this.save_button_Click);
             // 
             // Genogram
             // 
@@ -842,6 +865,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1421, 649);
+            this.Controls.Add(this.save_button);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.illustrate_textBox);
             this.Controls.Add(this.panel4);
@@ -854,7 +878,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.DrawPanel);
             this.Name = "Genogram";
-            this.Text = " ";     
+            this.Text = " ";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -956,6 +980,8 @@
         private System.Windows.Forms.TextBox illustrate_width_textBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button setpoint_button;
+        private System.Windows.Forms.Button delete_illustrate_button;
+        private System.Windows.Forms.Button save_button;
     }
 }
 
