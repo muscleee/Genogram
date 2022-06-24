@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Text.RegularExpressions;
 
 namespace Genogram
 {
@@ -81,7 +82,11 @@ namespace Genogram
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.AllPaintingInWmPaint, true);
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.SetStyle(ControlStyles.UserPaint, true);            
+            this.SetStyle(ControlStyles.UserPaint, true);
+
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);   //   禁止擦除背景.
+            SetStyle(ControlStyles.DoubleBuffer, true);   //   双缓冲
 
             ShapeSize_textBox.Text = "50";
             //Drag_radioButton.Checked = true;
@@ -96,7 +101,7 @@ namespace Genogram
             delete_illustrate_button.Enabled = false;
             illustrate_width_textBox.Text = "100";
             illustrate_height_textBox.Text = "50";
-            illustrate_textBox.Text = "123";
+            illustrate_textBox.Text = "測試";
             illustrateInfo.width = Convert.ToSingle(illustrate_width_textBox.Text);
             illustrateInfo.height = Convert.ToSingle(illustrate_height_textBox.Text);
 
@@ -110,19 +115,19 @@ namespace Genogram
             lineWidth = 3;
             //g = DrawPanel.CreateGraphics();
             
-            g = Graphics.FromHwnd(DrawPanel.Handle);
+            //g = Graphics.FromHwnd(DrawPanel.Handle);
             //Bitmap bmp = new Bitmap(DrawPanel.BackgroundImage);
             //g = Graphics.FromImage((Image)bmp);
 
             bmp = new Bitmap(DrawPanel.Width, DrawPanel.Height);
             g = Graphics.FromImage(bmp);
 
-            //DrawPanel.BackgroundImage = new Bitmap(bmp);
-            DrawPanel.BackgroundImage = bmp;
-
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;  //图片柔顺模式选择
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//高质量
             g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;//再加一点
+            //g.PixelOffsetMode = PixelOffsetMode.HighQuality; //高像素偏移质量
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
             // 一般畫筆
             pen = new Pen(drawColor, lineWidth);
             // 粗畫筆
@@ -137,7 +142,7 @@ namespace Genogram
             KeyPersonBush = new SolidBrush(Color.Gray);
             testPersonBush = new SolidBrush(Color.Red);
 
-            font = new Font("Times New Roman", 18, FontStyle.Regular, GraphicsUnit.Point);
+            font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
 
             // 畫布長寬
             DrawPanelWidth = DrawPanel.Width;
@@ -165,13 +170,27 @@ namespace Genogram
 
         private void DrawPanel_Paint(object sender, PaintEventArgs e)
         {
-            bmp = new Bitmap(DrawPanel.Width, DrawPanel.Height);
-            g = Graphics.FromImage(bmp);
+            //bmp = new Bitmap(DrawPanel.Width, DrawPanel.Height);
+            //g = Graphics.FromImage(bmp);
+            //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;  //图片柔顺模式选择
+            //g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;//高质量
+            //g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;//再加一点
+            //g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            g.Clear(Color.White);
+            //g.CompositingMode = CompositingMode.SourceCopy;
+            ////用透明色替换指定的区域
+            //SolidBrush solidBrush = new SolidBrush(Color.FromArgb(0, 0, 0, 0));
+            //PointF[] tmprectF= new PointF[1];
+            //tmprectF[0] = new PointF(DrawPanel.Width, DrawPanel.Height);
+            //g.FillPolygon(solidBrush, tmprectF);
+            ////模式转换为'CompositingMode.SourceOver',这样后面可以进行绘图
+            //g.CompositingMode = CompositingMode.SourceOver;
 
             //foreach (var item in rects)
             //{
             //    g.DrawRectangle(pen, item);
             //}
+
 
             if (points.Count != 0)
             {
@@ -230,9 +249,19 @@ namespace Genogram
             }
             foreach (var item in RecordillustrateShapeInfo)
             {
+                // 帶修正問題
+                //illustrateRectF = new RectangleF(item.x1, item.y1, item.w + font.Size / 2, item.h);
+                //g.DrawString(item.message, font, Brushes.Black, illustrateRectF);
+                ////Point point = new Point(Convert.ToInt32(item.x1), Convert.ToInt32(item.y1));
+                ////tmpRect = new Rectangle(Convert.ToInt32(item.x1), Convert.ToInt32(item.y1), Convert.ToInt32(item.w), Convert.ToInt32(item.h));
+                ////TextRenderer.DrawText(g, item.message, font, tmpRect, Color.Black);
+                //g.DrawRectangle(pen, item.x1-5, item.y1-5, item.w+font.Size/2, item.h+5);
+
                 illustrateRectF = new RectangleF(item.x1, item.y1, item.w, item.h);
                 g.DrawString(item.message, font, Brushes.Black, illustrateRectF);
-                g.DrawRectangle(pen, item.x1, item.y1, item.w, item.h);
+                g.DrawRectangle(pen, item.x1 - 5, item.y1 - 5, item.w, item.h);
+
+
             }
 
             // 暫時顯示文字方塊位置，在非setPoint時不顯示
@@ -243,15 +272,8 @@ namespace Genogram
             }
 
             e.Graphics.DrawImage(bmp, 0, 0, DrawPanel.Width, DrawPanel.Height);
-            //g.Dispose();
+
         }
-
-
-        //protected override void OnPaint(PaintEventArgs e)
-        //{
-        //    e.Graphics.DrawImage(bmp, 0, 0, DrawPanel.Width, DrawPanel.Height);
-        //    g.Dispose();
-        //}
 
         private void DrawPanel_MouseDown(object sender, MouseEventArgs e)
         {
@@ -264,7 +286,7 @@ namespace Genogram
 
                 tmpillustrateShapeInfo = UpdateillustrateShapeInfo(tmpillustrateShapeInfo, illustrate_textBox.Text, illustrateInfo.x1, illustrateInfo.y1, 
                                                                    illustrateInfo.width, illustrateInfo.height);
-                this.Refresh();
+                DrawPanel.Refresh();
                 //this.Invalidate(true);
             }
             isMouseDown = true;
@@ -289,10 +311,13 @@ namespace Genogram
 
                 switch (findShapeInfo[0].status)
                 {
+                    // 查看UpdateShapeInfo所帶的status
                     case "KeyPerson":
                     case "Parent":
                     case "Paternal GrandParent":
                     case "Maternal GrandParent":
+                    case "spouse":
+                    case "Child":
                     case "":
                         age_textBox.Focus();
                         break;
@@ -325,10 +350,15 @@ namespace Genogram
 
             findShapeInfo = RecordillustrateShapeInfo.Where(item => (item.x1 <= originalPoint.X && originalPoint.X <= item.x2 &&
                                                                      item.y1 <= originalPoint.Y && originalPoint.Y <= item.y2)).ToList();
+            
             // 若點選到文字方塊，則更新illustrate_textBox
             if (findShapeInfo.Count > 0)
             {
-                illustrate_textBox.Text = findShapeInfo[0].message;  //正常只會有一個
+                tmpshapeInfo = findShapeInfo[0]; //正常只會有一個
+                illustrate_textBox.Text = tmpshapeInfo.message;  //更改訊息
+                illustrate_width_textBox.Text = tmpshapeInfo.w.ToString();  //更改訊息下方寬顯示
+                illustrate_height_textBox.Text = tmpshapeInfo.h.ToString();
+
                 add_illustrate_button.Text = "修改敘述";
                 delete_illustrate_button.Enabled = true;
                 add_illustrate_button.Enabled = true;
@@ -364,7 +394,7 @@ namespace Genogram
                 RecordShapeInfo.Add(tmpshapeInfo);
 
                 //this.Invalidate(true);
-                this.Refresh();
+                DrawPanel.Refresh();
             }
         }
 
@@ -389,7 +419,7 @@ namespace Genogram
                 // 新增更新的 ShapeInfo
                 RecordShapeInfo.Add(tmpshapeInfo);
 
-                this.Refresh();
+                DrawPanel.Refresh();
                 //this.Invalidate(true);
             }
         }
@@ -420,19 +450,25 @@ namespace Genogram
                 //// 新增更新的 ShapeInfo
                 //RecordShapeInfo.Add(tmpshapeInfo);
 
-                this.Refresh();
+                DrawPanel.Refresh();
                 //this.Invalidate(true);
             }
         }
 
         private void illustrate_width_textBox_TextChanged(object sender, EventArgs e)
         {
-            illustrateInfo.width = Convert.ToSingle(illustrate_width_textBox.Text);
+            if (Regex.IsMatch(illustrate_width_textBox.Text, @"^[0-9]+$"))
+            {
+                illustrateInfo.width = Convert.ToSingle(illustrate_width_textBox.Text);
+            }
         }
 
         private void illustrate_height_textBox_TextChanged(object sender, EventArgs e)
         {
-            illustrateInfo.height = Convert.ToSingle(illustrate_height_textBox.Text);
+            if (Regex.IsMatch(illustrate_height_textBox.Text, @"^[0-9]+$"))
+            {
+                illustrateInfo.height = Convert.ToSingle(illustrate_height_textBox.Text);
+            }
         }
 
         private void setpoint_button_Click(object sender, EventArgs e)
@@ -442,7 +478,7 @@ namespace Genogram
             {
                 illustrateInfo.setPointFlag = false;
                 tmpillustrateShapeInfo.Clear(); //清空暫存
-                this.Refresh();
+                DrawPanel.Refresh();
                 //this.Invalidate(true);
                 setpoint_button.Text = "設定起點";
             }
@@ -461,20 +497,27 @@ namespace Genogram
             add_illustrate_button.Text = "修改敘述";
             delete_illustrate_button.Enabled = true;
             bool changeOldillustrate = false;
+            float x1 = 0f;
+            float y1 = 0f;
+            // 新增新的文字方塊訊息
             if (tmpillustrateShapeInfo.Count > 0)
             {
                 RecordillustrateShapeInfo.Add(tmpillustrateShapeInfo[tmpillustrateShapeInfo.Count - 1]);
                 findShapeInfo = RecordillustrateShapeInfo.Where(item => (item.x1 - illustrateInfo.width <= originalPoint.X && originalPoint.X <= item.x2 &&
                                                                          item.y1 - illustrateInfo.height <= originalPoint.Y && originalPoint.Y <= item.y2)).ToList();
                 tmpillustrateShapeInfo.Clear();
-                changeOldillustrate = false;
+                x1 = originalPoint.X;
+                y1 = originalPoint.Y;
+
             }
+            // 更新舊的訊息
             else if (RecordillustrateShapeInfo.Count > 0)  //沒有暫存紀錄，也沒有過去紀錄，則不做事
             {
                 findShapeInfo = RecordillustrateShapeInfo.Where(item => (item.x1 <= originalPoint.X && originalPoint.X <= item.x2 &&
                                                                          item.y1 <= originalPoint.Y && originalPoint.Y <= item.y2)).ToList();
                 tmpshapeInfo = findShapeInfo[0];  //正常只會有一個
-                changeOldillustrate = true;
+                x1 = tmpshapeInfo.x1;
+                y1 = tmpshapeInfo.y1;
             }
             else
             {
@@ -483,19 +526,38 @@ namespace Genogram
 
             if (findShapeInfo.Count > 0)
             {
+                
                 foreach (var item in findShapeInfo)
                 {
                     RecordillustrateShapeInfo.Remove(item);
                 }
 
-                RecordillustrateShapeInfo = changeOldillustrate ? 
-                    UpdateillustrateShapeInfo(RecordillustrateShapeInfo, illustrate_textBox.Text, tmpshapeInfo.x1, tmpshapeInfo.y1,
-                                                                      tmpshapeInfo.w, tmpshapeInfo.h) :                                                
-                    UpdateillustrateShapeInfo(RecordillustrateShapeInfo, illustrate_textBox.Text, originalPoint.X, originalPoint.Y, 
-                                                                      illustrateInfo.width, illustrateInfo.height);
+                // 帶處理輸出問題
+                // 不用預設的 illustrateInfo.width, illustrateInfo.height 大小去做矩形
+                //Size size = TextRenderer.MeasureText(illustrate_textBox.Text, font);
+                //float area = size.Width * (size.Height + font.Size/2);
+                //float autoWidth, autoHeight;
+                //if (illustrateInfo.width > size.Width)
+                //{
+                //    autoWidth = size.Width;
+                //    autoHeight = size.Height;
+                //}
+                //else
+                //{
+                //    autoWidth = illustrateInfo.width;
+                //    //autoHeight = area / illustrateInfo.width;
+                //    autoHeight = Convert.ToInt16(Math.Ceiling(size.Width / (illustrateInfo.width-20))) * size.Height;
+                //}
 
+                //UpdateillustrateShapeInfo(RecordillustrateShapeInfo, 
+                //                illustrate_textBox.Text, x1, y1, autoWidth, autoHeight);
+
+                UpdateillustrateShapeInfo(RecordillustrateShapeInfo,
+                    illustrate_textBox.Text, x1, y1, illustrateInfo.width, illustrateInfo.height);
+
+             
             }
-            this.Refresh();
+            DrawPanel.Refresh();
             //this.Invalidate(true);
             //g.DrawString(illustrateInfo.memo, font, Brushes.Black, illustrateRectF[0]);
         }
@@ -511,7 +573,7 @@ namespace Genogram
             {
                 RecordillustrateShapeInfo.Remove(item);
             }
-            this.Refresh();
+            DrawPanel.Refresh();
             //this.Invalidate(true);
         }
 
@@ -522,21 +584,17 @@ namespace Genogram
 
         private void save_button_Click(object sender, EventArgs e)
         {
-            //g = Graphics.FromHwnd(DrawPanel.Handle);
-            //DrawPanel.BackgroundImage.Save("test.png");
-            //g.Save();
-            //DrawPanel.BackgroundImage.Save("./test.png");
+            string FilePath = @"./Genogram.png";
+            string FilePath_Transparent = @"./Genogram_Transparent.png";
 
-            //Bitmap bmp = new Bitmap(DrawPanel.Width, DrawPanel.Height, g);
-            //DrawPanel.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
-            //bmp.Save("D:\\Joe\\code\\C#\\Genogram-main\\Genogram\\test.png");
+            DrawPanel.BackColor = Color.Transparent;
+            bmp.Save(FilePath, System.Drawing.Imaging.ImageFormat.Png);
 
-            bmp.Save("D:\\Joe\\code\\C#\\Genogram-main\\Genogram\\test.png", System.Drawing.Imaging.ImageFormat.Png); // 可以指定格式
+            Bitmap transparentBitMap = new Bitmap(bmp);
+            transparentBitMap.MakeTransparent(Color.White);
+            transparentBitMap.Save(FilePath_Transparent, System.Drawing.Imaging.ImageFormat.Png);
 
 
-            //Bitmap bmp = new Bitmap(DrawPanel.Width, DrawPanel.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            //DrawPanel.DrawToBitmap(bmp, new Rectangle(0, 0, DrawPanel.Width, DrawPanel.Height));
-            //bmp.Save("D:\\Joe\\code\\C#\\Genogram-main\\Genogram\\test.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
         }
 
         private void DrawPanel_MouseUp(object sender, MouseEventArgs e)
@@ -569,7 +627,7 @@ namespace Genogram
                     originalPoint = new MovePoint { X = e.X, Y = e.Y };
 
                     this.Invalidate(true);
-                    //DrawPanel.Refresh();
+                    //DrawPanel.Refresh()();
 
                 }
                
@@ -719,7 +777,7 @@ namespace Genogram
         {
             g.Clear(Color.White);
             CalculateInfo();
-            this.Refresh();
+            DrawPanel.Refresh();
             //this.Invalidate(true);
             //g.DrawEllipse(pen, 3000, 500, 100, 100);
         }
