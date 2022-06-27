@@ -156,7 +156,7 @@ namespace Genogram
             // 不同類別的高度
             parentShapeRatio_y = 0.1f;
             selfShapeRatio_y = 0.4f;
-            childShapeRatio_y = 0.7f;
+            childShapeRatio_y = 0.6f;
             // 個案男女位置初始(畫布比例，形狀左上角起點)
             selfShapeRatio_M_x = 0.4f;
             selfShapeRatio_W_x = 0.6f;
@@ -747,9 +747,11 @@ namespace Genogram
         {
             if (self_relation_childern_radioButton.Checked)
             {
-                selfShapeRatio_y = 0.6f;
-                selfShapeRatio_M_x = 0.45f;
-                selfShapeRatio_W_x = 0.55f;
+                selfShapeRatio_y = childShapeRatio_y;
+                //selfShapeRatio_M_x = 0.4f;
+                //selfShapeRatio_W_x = 0.5f;
+                selfShapeRatio_M_x = otherShapeRatio_M_x;
+                selfShapeRatio_W_x = otherShapeRatio_W_x;
                 selfShapeDistanceRatio = selfShapeRatio_W_x - selfShapeRatio_M_x;
 
                 paternal_marriage_label.Text = "父方長輩婚姻 : ";
@@ -791,16 +793,16 @@ namespace Genogram
             float m_fatherXpos, m_fatherYpos, m_motherXpos, m_motherYpos;
             List<float> position = new List<float> { };
             // 父母(男)
-            m_parentLineX1 = x1 - DrawPanelWidth* ShapeDistanceRatio / 2;
-            m_parentLineX2 = x1 + DrawPanelWidth* ShapeDistanceRatio / 2;
-            m_parentLineY1 = y - lineDropY* 2;
+            m_parentLineX1 = x1 - DrawPanelWidth * ShapeDistanceRatio * 2/3;
+            m_parentLineX2 = x1 + DrawPanelWidth * ShapeDistanceRatio * 2/3;
+            m_parentLineY1 = y - lineDropY*3;
             m_parentLineY2 = y - lineDropY;
             m_fatherXpos = m_parentLineX1 - ShapeWidth / 2;
             m_motherXpos = m_parentLineX2 - ShapeWidth / 2;
-            m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight;
+            m_fatherYpos = m_motherYpos = m_parentLineY1 - ShapeHeight/2;
 
             // 長輩婚姻連線
-            ConnectMarriageLine(MarriageType, m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
+            ConnectMarriageLine(MarriageType, m_parentLineX1 + ShapeWidth / 2, m_parentLineY1, m_parentLineX2 - ShapeWidth / 2, m_parentLineY2);
 
             // 連接長輩垂直線
             UpdateShapeInfo(0, "vertical", pen, m_parentLineX1, m_parentLineY1, m_parentLineX2, m_parentLineY2);
@@ -933,10 +935,16 @@ namespace Genogram
             selfWomanXpos = selfShapeRatio_W_x * DrawPanelWidth;
             selfManYpos = selfWomanYpos = selfShapeRatio_y * DrawPanelHeight;
             // 個案男女連線x, y
-            selfPersonLineX1 = selfManXpos + ShapeWidth / 2;
-            selfPersonLineX2 = selfWomanXpos + ShapeWidth / 2;
-            selfPersonLineY1 = selfManYpos + ShapeHeight + lineWidth / 2; // 校正線寬造成的重疊區 (lineWidth/2)
+            //bottom的連線第一版本
+            //selfPersonLineX1 = selfManXpos + ShapeWidth / 2;
+            //selfPersonLineX2 = selfWomanXpos + ShapeWidth / 2;
+            //selfPersonLineY1 = selfManYpos + ShapeHeight / 2 + lineWidth / 2; // 校正線寬造成的重疊區 (lineWidth/2)
+            //selfPersonLineY2 = selfPersonLineY1 + lineDropY;
+            selfPersonLineX1 = selfManXpos + ShapeWidth;
+            selfPersonLineX2 = selfWomanXpos;
+            selfPersonLineY1 = selfManYpos + ShapeHeight / 2;
             selfPersonLineY2 = selfPersonLineY1 + lineDropY;
+
             // 個案男女連線狀態(反斜線, 叉叉) x, y
             //slashX1 = (selfPersonLineX1 + selfPersonLineX2) / 2 - slashWidth;
             //slashY1 = selfPersonLineY2 - slashHeight;
@@ -986,20 +994,20 @@ namespace Genogram
             selfInfo.marriage = CheckMarriage(self_married_radioButton.Checked, self_cohabit_radioButton.Checked, self_separate_radioButton.Checked, self_divorce_radioButton.Checked);
             ConnectMarriageLine(selfInfo.marriage, selfPersonLineX1, selfPersonLineY1, selfPersonLineX2, selfPersonLineY2);
 
-
+            
             // [個案爸媽圖形]
             grandparentInfo.paternal_marriage = CheckMarriage(paternal_married_radioButton.Checked, paternal_cohabit_radioButton.Checked, paternal_separate_radioButton.Checked, paternal_divorce_radioButton.Checked);
             grandparentInfo.maternal_marriage = CheckMarriage(maternal_married_radioButton.Checked, maternal_cohabit_radioButton.Checked, maternal_separate_radioButton.Checked, maternal_divorce_radioButton.Checked);
 
             if (self_relation_parent_radioButton.Checked)
             {               
-                DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 男方爸媽
-                DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 女方爸媽
+                DrawParent(selfPersonLineX1 - ShapeWidth / 2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 男方爸媽
+                DrawParent(selfPersonLineX2 + ShapeWidth / 2, selfManYpos, otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 女方爸媽
             }
             else if (man_radioButton.Checked)
             {                
                 parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
-                grandparent_Pos = DrawParent(selfPersonLineX1, selfManYpos, otherShapeDistanceRatio*2, parentInfo.marriage, 3, "Parent"); //爸媽
+                grandparent_Pos = DrawParent(selfPersonLineX1 - ShapeWidth / 2, selfManYpos, selfShapeDistanceRatio*3/2, parentInfo.marriage, 3, "Parent"); //爸媽
                 DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 爺爺 阿嬤
                 DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 外公 外婆
             }
@@ -1007,7 +1015,7 @@ namespace Genogram
             {
 
                 parentInfo.marriage = CheckMarriage(parent_married_radioButton.Checked, parent_cohabit_radioButton.Checked, parent_separate_radioButton.Checked, parent_divorce_radioButton.Checked);
-                grandparent_Pos = DrawParent(selfPersonLineX2, selfManYpos, otherShapeDistanceRatio * 2, parentInfo.marriage, 3, "Parent"); //爸媽
+                grandparent_Pos = DrawParent(selfPersonLineX2 + ShapeWidth / 2, selfManYpos, selfShapeDistanceRatio*3/2, parentInfo.marriage, 3, "Parent"); //爸媽
                 DrawParent(grandparent_Pos[0] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.paternal_marriage, 1, "Paternal GrandParent"); // 爺爺 阿嬤
                 DrawParent(grandparent_Pos[1] + ShapeWidth / 2, grandparent_Pos[2], otherShapeDistanceRatio, grandparentInfo.maternal_marriage, 2, "Maternal GrandParent"); // 外公 外婆
             }
@@ -1083,8 +1091,9 @@ namespace Genogram
                 childInfo.Xpos = new List<float> { };
                 childInfo.Xpos_marriage = new List<float> { };
                 // 只有1個小孩時，初始高度不一樣
-                childInfo.Ypos = childInfo.member.Count() == 1 ? childLineY1 : childLineY2;
-                childInfo.Ypos_marriage = childInfo.Ypos + ShapeWidth;
+                //childInfo.Ypos = childInfo.member.Count() == 1 ? childLineY1 : childLineY2;
+                childInfo.Ypos = childLineY2;
+                childInfo.Ypos_marriage = childInfo.Ypos + ShapeWidth/2;
                 int index = 0;
                 int startRectIdx = 4;
                 foreach (string item in childInfo.member)
@@ -1142,12 +1151,19 @@ namespace Genogram
                     ConnectShape(pen, "top", childInfo.Xpos[idx], childLineY1, childInfo.Xpos[idx + 1], childInfo.Ypos);
                 }
 
+                // 若單一個子女，則與自己互連接，延長垂直線並記錄該線
+                if (childInfo.Xpos.Count() == 1)
+                {
+                    UpdateShapeInfo(0, "top", pen, childInfo.Xpos[0], childLineY1, childInfo.Xpos[0], childInfo.Ypos);
+                    ConnectShape(pen, "top", childInfo.Xpos[0], childLineY1, childInfo.Xpos[0], childInfo.Ypos);
+                }
+
                 // 處理子女婚姻的連線狀態
                 for (int i = 0; i < childInfo.childmarriageNum; i++)
                 {
                     int idx = i * 2;
                     string item = childInfo.marriageType[i];
-                    ConnectMarriageLine(item, childInfo.Xpos_marriage[idx], childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1], childInfo.Ypos_marriage + lineDropY);
+                    ConnectMarriageLine(item, childInfo.Xpos_marriage[idx] + ShapeWidth / 2, childInfo.Ypos_marriage, childInfo.Xpos_marriage[idx + 1] - ShapeWidth / 2, childInfo.Ypos_marriage + lineDropY);
                 }
 
             }
@@ -1159,14 +1175,25 @@ namespace Genogram
         // 圖形連結形狀
         private void ConnectShape(Pen drawPen, string type, float x1, float y1, float x2, float y2)
         {
-            // 左右兩邊固定使用預設畫筆pen, 水平線依據外部輸入，可更改形狀
-            // 左垂直線
-            g.DrawLine(drawPen, x1, y1, x1, y2);
-            // 右垂直線
-            g.DrawLine(drawPen, x2, y1, x2, y2);
-            // 水平線
-            float HorizontalLineY = type == "top" ? y1 : y2;           
-            g.DrawLine(drawPen, x1 - lineWidth / 2, HorizontalLineY, x2 + lineWidth / 2, HorizontalLineY);
+            //// 左右兩邊固定使用預設畫筆pen, 水平線依據外部輸入，可更改形狀
+            //// 左垂直線
+            //g.DrawLine(drawPen, x1, y1, x1, y2);
+            //// 右垂直線
+            //g.DrawLine(drawPen, x2, y1, x2, y2);
+            //// 水平線
+            //float HorizontalLineY = type == "top" ? y1 : y2;           
+            //g.DrawLine(drawPen, x1 - lineWidth / 2, HorizontalLineY, x2 + lineWidth / 2, HorizontalLineY);
+
+            if (type == "top")
+            {
+                // 左右兩邊固定使用預設畫筆pen, 水平線依據外部輸入，可更改形狀
+                // 左垂直線
+                g.DrawLine(drawPen, x1, y1, x1, y2);
+                // 右垂直線
+                g.DrawLine(drawPen, x2, y1, x2, y2);
+                
+            }
+            g.DrawLine(drawPen, x1 - lineWidth / 2, y1, x2 + lineWidth / 2, y1);
 
         }
 
@@ -1205,7 +1232,8 @@ namespace Genogram
             {
                 // 垂直線
                 LineInfo.x1 = (x1 + x2) / 2;
-                LineInfo.y1 = y2;
+                //LineInfo.y1 = y2; //bottom的連線第一版本
+                LineInfo.y1 = y1;
                 LineInfo.x2 = (x1 + x2) / 2;
                 LineInfo.y2 = y2 + lineDropY;
             }
